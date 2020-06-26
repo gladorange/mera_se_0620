@@ -1,3 +1,5 @@
+
+
 public class VariablesExample {
 
     public static void main(String[] args) {
@@ -28,7 +30,7 @@ public class VariablesExample {
         Double dblInt = .2;
 
 
-
+        System.out.println("Это изменение");
 
 
 
