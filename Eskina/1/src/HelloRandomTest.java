@@ -1,11 +1,11 @@
 import java.util.Random;
 public class HelloRandomTest {
     public static void main(String[] args) {
-	    Random rand = new Random();
-	    Integer num1 = rand.nextInt(21);
-	    Integer num2 = rand.nextInt(21);
+        Random rand = new Random();
+        Integer num1 = rand.nextInt(21);
+        Integer num2 = rand.nextInt(21);
 
-	    System.out.println("Первое число: " + num1);
+        System.out.println("Первое число: " + num1);
         System.out.println("Второе число: " + num2);
 
         if (num1 > 10) {
