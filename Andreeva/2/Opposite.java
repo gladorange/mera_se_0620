@@ -2,26 +2,26 @@ import java.util.Random;
 
 public class Opposite {
     public static void main(String[] args) {
-        int [] ArrayNum;
-        ArrayNum = new int[10];
+        int [] arrayNum;
+        arrayNum = new int[10];
         Random random = new Random();
-        for (int i=0; i<ArrayNum.length; i++) {
-            ArrayNum[i]=random.nextInt();
-                System.out.println(ArrayNum[i]);
+        for (int i=0; i<arrayNum.length; i++) {
+            arrayNum[i]=random.nextInt();
+                System.out.println(arrayNum[i]);
             }
-        for (int i=0;i<ArrayNum.length;i++) {
-            for (i = 0; i < ArrayNum.length - 1; i++) {
-                if (((ArrayNum[i] < 0) && (ArrayNum[i + 1] > 0)) ^ ((ArrayNum[i] > 0) && (ArrayNum[i + 1] < 0))) {
-                    ArrayNum[i] += ArrayNum[i + 1];
-                    ArrayNum[i + 1] = ArrayNum[i];
+        for (int i=0;i<arrayNum.length;i++) {
+            for (i = 0; i < arrayNum.length - 1; i++) {
+                if (((arrayNum[i] < 0) && (arrayNum[i + 1] > 0)) || ((arrayNum[i] > 0) && (arrayNum[i + 1] < 0))) {
+                    arrayNum[i] += arrayNum[i + 1];
+                    arrayNum[i + 1] = arrayNum[i];
                     break;
                 }
             }
 
         }
         System.out.println("Преобразованный массив");
-        for (int i=0; i<ArrayNum.length; i++) {
-            System.out.println(ArrayNum[i]);
+        for (int i=0; i<arrayNum.length; i++) {
+            System.out.println(arrayNum[i]);
         }
 
 }}

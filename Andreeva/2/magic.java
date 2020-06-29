@@ -2,13 +2,13 @@ import java.util.Random;
 
 class magic {
     public static void main(String[] arguments) {
-        int [] ArrayOfMagic;
-        ArrayOfMagic = new int[100];
+        int [] arrayOfMagic;
+        arrayOfMagic = new int[100];
         Random random = new Random();
-        for (int i=0; i<ArrayOfMagic.length; i=i+1) {
-            ArrayOfMagic[i]=-100+random.nextInt(200+1);
-            if (isMagicNumber (ArrayOfMagic[i])) {
-                System.out.println("число "+ArrayOfMagic[i]+" -магическое");
+        for (int i=0; i<arrayOfMagic.length; i=i+1) {
+            arrayOfMagic[i]=-100+random.nextInt(200+1);
+            if (isMagicNumber (arrayOfMagic[i])) {
+                System.out.println("число "+arrayOfMagic[i]+" -магическое");
             }
         }
     }
