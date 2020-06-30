@@ -10,7 +10,6 @@ public class FixPriceShop {
     public static int LUCKY_HOUR;
     public static final String[] GOODS;
 
-
     static {
         RAND = new Random();
         GOODS = new String[] {"мыло", "лимонад", "книга", "печенье", "перчатки", "пакеты для мусора", "чашка", "какао",
