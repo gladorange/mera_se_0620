@@ -1,7 +1,4 @@
 package com.mera.lesson3;
-
-import javax.print.attribute.standard.PrinterMakeAndModel;
-import java.util.Arrays;
 import java.util.Random;
 
 public class Main {
