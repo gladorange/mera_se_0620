@@ -5,7 +5,7 @@ public class Person {
 
 
     static {
-        System.out.println("Класс Person загрузился");
+        System.out.println("Класс com.mera.another.Person загрузился");
     }
 
 
@@ -44,7 +44,7 @@ public class Person {
     }
 
     public static void printHelp() {
-        System.out.println("Класс Person описывает человека с именем и фамилией");
+        System.out.println("Класс com.mera.another.Person описывает человека с именем и фамилией");
     }
 
 }
