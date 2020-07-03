@@ -19,11 +19,7 @@ public class MagicNumbers {
         int number2 = number % 10;
         int number1 = number / 10;
         if(Math.abs(number) > 10) {
-            if(Math.abs(number1) == Math.abs(number2)) {
-                return true;
-            } else {
-                return false;
-            }
+            return (Math.abs(number1) == Math.abs(number2));
         } else {
             return false;
         }
