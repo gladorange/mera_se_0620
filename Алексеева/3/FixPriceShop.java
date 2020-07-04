@@ -9,7 +9,7 @@ public class FixPriceShop {
     private String[] items;
     private int price;
     private static int happyHour;
-    private final static double HAPPY_HOUR_DISCONT = 0.5;
+    private final static double HAPPY_HOUR_DISCOUNT = 0.5;
 
     static {
         //happyHour = 17;  // for debugging
@@ -36,7 +36,7 @@ public class FixPriceShop {
     public int checkItemPrice(String item, int hour) {
         for(String thisItem : items) {
             if (thisItem.equals(item)) {
-                return hour == happyHour ? (int)(price * HAPPY_HOUR_DISCONT) : price;
+                return hour == happyHour ? (int)(price * HAPPY_HOUR_DISCOUNT) : price;
             }
 
         }
