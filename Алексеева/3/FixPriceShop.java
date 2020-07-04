@@ -13,7 +13,7 @@ public class FixPriceShop {
 
     static {
         //happyHour = 17;  // for debugging
-        happyHour = new Random().nextInt(23);  // happy hour is a random value from 0 to 23, in all stores this number is the same
+        happyHour = new Random().nextInt(24);  // happy hour is a random value from 0 to 23, in all stores this number is the same
     }
 
     FixPriceShop() throws FileNotFoundException {
