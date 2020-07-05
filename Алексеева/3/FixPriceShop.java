@@ -9,11 +9,11 @@ public class FixPriceShop {
     private String[] items;
     private int price;
     private static int happyHour;
-    private static double happyHourDiscount = 0.5;
+    private final static double HAPPY_HOUR_DISCOUNT = 0.5;
 
     static {
         //happyHour = 17;  // for debugging
-        happyHour = new Random().nextInt(23);  // happy hour is a random value from 0 to 23, in all stores this number is the same
+        happyHour = new Random().nextInt(24);  // happy hour is a random value from 0 to 23, in all stores this number is the same
     }
 
     FixPriceShop() throws FileNotFoundException {
@@ -36,7 +36,7 @@ public class FixPriceShop {
     public int checkItemPrice(String item, int hour) {
         for(String thisItem : items) {
             if (thisItem.equals(item)) {
-                return hour == happyHour ? (int)(price * happyHourDiscount) : price;
+                return hour == happyHour ? (int)(price * HAPPY_HOUR_DISCOUNT) : price;
             }
 
         }
