@@ -13,8 +13,8 @@ public class Magician extends Character {
         Magician.MAX_POWER = 20;
     }
 
-    public Magician(String name, Integer maxHeatPoint, Spell[] spells) {
-        super(name, maxHeatPoint);
+    public Magician(String name, Integer maxHitPoint, Spell[] spells) {
+        super(name, maxHitPoint);
         this.spells = spells;
         this.power = new Random().nextInt(Magician.MAX_POWER - Magician.MIN_POWER) + Magician.MIN_POWER;
     }
@@ -34,13 +34,13 @@ public class Magician extends Character {
 
     void step(Position[] positions) {
         for (Spell sp : spells) {
-            if (sp.isBlocked && (new Random().nextBoolean())) {
+            if (sp.getSpelled() && (new Random().nextBoolean())) {
                 continue;
             }
 
             switch (sp) {
                 case HEALLING: {
-                    if (this.getHeatPoints() < 20) {
+                    if (this.getHitPoints() < 20) {
                         cast(sp, positions);
                     }
                     break;
@@ -48,7 +48,7 @@ public class Magician extends Character {
                 case LIGHTNING: {
                     Position player = positions[0];
                     for (Position pos : positions) {
-                        if (pos.getCharacter().getHeatPoints() > player.getCharacter().getHeatPoints()) {
+                        if (pos.getCharacter().getHitPoints() > player.getCharacter().getHitPoints()) {
                             player = pos;
                         }
                     }
@@ -69,17 +69,16 @@ public class Magician extends Character {
         }
     }
 
-    protected void changeHeatPoints(Character character, Integer heatPoints) {
-        this.heatPoints += heatPoints;
+    protected void changeHitPoints(Character character, Integer hitPoints) {
+        this.hitPoints += hitPoints;
 
-        if (this.heatPoints > this.maxHeatPoint) {
-            this.heatPoints = this.maxHeatPoint;
+        if (this.hitPoints > this.maxHitPoint) {
+            this.hitPoints = this.maxHitPoint;
             return;
         }
 
-        if (this.heatPoints < 0) {
-            this.heatPoints = 0;
-            return;
+        if (this.hitPoints < 0) {
+            this.hitPoints = 0;
         }
     }
 }

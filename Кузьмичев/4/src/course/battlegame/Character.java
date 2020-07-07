@@ -2,36 +2,40 @@ package course.battlegame;
 
 abstract public class Character {
     private final String name;
-    private static Integer DEFAULT_MAX_HEATPOINTS = 100;
-    protected final Integer maxHeatPoint;
-    protected Integer heatPoints;
+    private static Integer DEFAULT_MAX_HEATPOINTS;
+    protected final Integer maxHitPoint;
+    protected Integer hitPoints;
 
-    Character(String name, Integer maxHeatPoint) {
+    {
+        Character.DEFAULT_MAX_HEATPOINTS = 100;
+    }
+
+    Character(String name, Integer maxHitPoint) {
         this.name = name;
 
-        if (maxHeatPoint <= 0) {
-            this.heatPoints = Character.DEFAULT_MAX_HEATPOINTS;
-            this.maxHeatPoint = Character.DEFAULT_MAX_HEATPOINTS;
+        if (maxHitPoint <= 0) {
+            this.hitPoints = Character.DEFAULT_MAX_HEATPOINTS;
+            this.maxHitPoint = Character.DEFAULT_MAX_HEATPOINTS;
 
             return;
         }
 
-        this.heatPoints = maxHeatPoint;
-        this.maxHeatPoint = maxHeatPoint;
+        this.hitPoints = maxHitPoint;
+        this.maxHitPoint = maxHitPoint;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public Integer getHeatPoints() {
-        return this.heatPoints;
+    public Integer getHitPoints() {
+        return this.hitPoints;
     }
 
-    public Integer getMaxHeatPoint() {
-        return this.maxHeatPoint;
+    public Integer getMaxHitPoint() {
+        return this.maxHitPoint;
     }
 
-    abstract protected void changeHeatPoints(Character character, Integer heatPoints);
+    abstract protected void changeHitPoints(Character character, Integer hitPoints);
     abstract void step(Position[] positions);
 }

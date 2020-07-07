@@ -10,7 +10,7 @@ public class Position {
     }
 
     public Position(Integer positionNumber) {
-        this.positionNumber = 0;
+        this.positionNumber = positionNumber;
         this.character = null;
         this.isTaken = false;
     }

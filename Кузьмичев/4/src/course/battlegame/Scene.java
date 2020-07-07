@@ -1,14 +1,16 @@
 package course.battlegame;
 
 public class Scene {
-    private static Integer DEFAULT_NUM_POSITIONS = 2;
+    private static Integer DEFAULT_NUM_POSITIONS;
     private final Integer maxPositions;
     private final Position[] battlefield;
     private Integer currentCharacter;
-    private Boolean isEndGame = false;
+    private Boolean isEndGame;
 
     {
+        Scene.DEFAULT_NUM_POSITIONS = 2;
         this.currentCharacter = 0;
+        this.isEndGame = false;
     }
 
     public Scene() {
@@ -26,8 +28,7 @@ public class Scene {
         battlefield = new Position[this.maxPositions];
 
         for (Integer i = 0; i < battlefield.length; i++) {
-            this.battlefield[i] = new Position();
-            this.battlefield[i].setPositionNumber(i + 1);
+            this.battlefield[i] = new Position(i + 1);
         }
     }
 
@@ -77,14 +78,38 @@ public class Scene {
         return this.isEndGame;
     }
 
+    private Position[] getAliveCharacters() {
+        Integer alivePlayersNum = 0;
+
+        for(Position pos: battlefield){
+            if(pos.getTaken()) {
+                alivePlayersNum++;
+            }
+        }
+
+        if (alivePlayersNum.equals(0)) {
+            return null;
+        }
+
+        Position[] alivePlayers = new Position[alivePlayersNum];
+
+        for(Position pos: battlefield){
+            if(pos.getTaken()) {
+                alivePlayers[--alivePlayersNum] = pos;
+            }
+        }
+
+        return alivePlayers;
+    }
+
     public void gameStep() {
-        if (this.isEndGame) {
+        if (this.getEndGame()) {
             System.out.println("Game Over!");
             return;
         }
 
         for (Position pos: this.battlefield) {
-            if (pos.getTaken() && pos.getCharacter().getHeatPoints().equals(0)) {
+            if (pos.getTaken() && pos.getCharacter().getHitPoints().equals(0)) {
                 System.out.println("Player \"" + pos.getCharacter().getName() + "\" was killed");
                 pos.removeCharacter();
             }
@@ -96,26 +121,13 @@ public class Scene {
             position = battlefield[++currentCharacter % battlefield.length];
         }
 
-        Integer alivePlayersNum = 0;
+        Position[] alivePlayers = getAliveCharacters();
 
-        for(Position pos: battlefield){
-            if(pos.getTaken()) {
-                alivePlayersNum++;
-            }
-        }
-
-        if(alivePlayersNum.equals(1)) {
+        if(alivePlayers.length == 1) {
             this.isEndGame = true;
+            System.out.println("Player \"" + alivePlayers[0].getCharacter().getName() + "\" win!");
             System.out.println("Game Over!");
             return;
-        }
-
-        Position[] alivePlayers = new Position[alivePlayersNum];
-
-        for(Position pos: battlefield){
-            if(pos.getTaken()) {
-                alivePlayers[--alivePlayersNum] = pos;
-            }
         }
 
         position.getCharacter().step(alivePlayers);

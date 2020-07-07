@@ -19,7 +19,7 @@ public class Monster extends Character {
 
     private void heatCharacter(Character character) {
         System.out.println("Monster \"" + this.getName() + "\" attack \"" + character.getName() + "\" on " + this.power + " hp");
-        character.changeHeatPoints(this, -this.power);
+        character.changeHitPoints(this, -this.power);
     }
 
     void step(Position[] positions) {
@@ -35,18 +35,17 @@ public class Monster extends Character {
         heatCharacter(positions[randomCharacter].getCharacter());
     }
 
-    protected void changeHeatPoints(Character character, Integer heatPoints)
+    protected void changeHitPoints(Character character, Integer hitPoints)
     {
-        this.heatPoints += heatPoints;
+        this.hitPoints += hitPoints;
 
-        if (this.heatPoints > this.maxHeatPoint) {
-            this.heatPoints = this.maxHeatPoint;
+        if (this.hitPoints > this.maxHitPoint) {
+            this.hitPoints = this.maxHitPoint;
             return;
         }
 
-        if (this.heatPoints < 0) {
-            this.heatPoints = 0;
-            return;
+        if (this.hitPoints < 0) {
+            this.hitPoints = 0;
         }
     }
 }
