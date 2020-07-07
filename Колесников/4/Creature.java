@@ -29,20 +29,13 @@ abstract class Creature {
         this.health += damage;
     }
 
-    Weapon selectWeapon (Weapon[] weapons){
-        return weapons[new Random().nextInt(weapons.length)];
-    }
+
 
     abstract void attack();
 }
 
-abstract class Monster extends Creature {
-    Monster(String name) {
-        super(name);
-    }
-}
 
-class Ktulhu extends Monster{
+class Ktulhu extends Creature implements Monster{
     private Weapon[] weapons = new Weapon[1];
 
     Ktulhu(String name) {
@@ -57,13 +50,8 @@ class Ktulhu extends Monster{
     }
 }
 
-abstract class Wizard extends Creature {
-    Wizard(String name) {
-        super(name);
-    }
-}
 
-class LightningWizard extends Wizard{
+class LightningWizard extends Creature implements Wizard{
     private Weapon[] weapons = new Weapon[3];
 
     LightningWizard(String name) {
@@ -81,7 +69,7 @@ class LightningWizard extends Wizard{
     }
 }
 
-class FireWizard extends Wizard{
+class FireWizard extends Creature implements Wizard{
     private Weapon[] weapons = new Weapon[3];
 
     FireWizard(String name) {
@@ -99,7 +87,7 @@ class FireWizard extends Wizard{
     }
 }
 
-class Druid extends Wizard{
+class Druid extends Creature implements Wizard{
     private Weapon[] weapons = new Weapon[3];
 
     Druid(String name) {
@@ -116,4 +104,19 @@ class Druid extends Wizard{
         weapon.attackTarget(this);
     }
 }
+
+interface Wizard {
+
+    default Weapon selectWeapon (Weapon[] weapons){
+        return weapons[new Random().nextInt(weapons.length)];
+    }
+}
+
+interface Monster {
+
+    default Weapon selectWeapon (Weapon[] weapons){
+        return weapons[new Random().nextInt(weapons.length)];
+    }
+}
+
 
