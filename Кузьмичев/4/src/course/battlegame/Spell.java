@@ -2,6 +2,7 @@ package course.battlegame;
 
 public enum Spell {
     HEALLING{
+        @Override
         public void cast(Position[] positions, Magician magician) {
             magician.changeHitPoints(magician, magician.getMaxHitPoint());
             System.out.println("Magician \"" + magician.getName() + "\" healling himself on " + magician.getHitPower() + " hp");
@@ -9,6 +10,7 @@ public enum Spell {
         }
     },
     LIGHTNING{
+        @Override
         public void cast(Position[] positions, Magician magician) {
             positions[0].getCharacter().changeHitPoints(magician, -magician.getHitPower());
             Spell.commonMessage(positions[0].getCharacter(), magician);
@@ -16,6 +18,7 @@ public enum Spell {
         }
     },
     CHAINLIGHTNING{
+        @Override
         public void cast(Position[] positions, Magician magician) {
             for (Position pos: positions) {
                 if (pos.getCharacter() == magician) {
@@ -29,6 +32,7 @@ public enum Spell {
         }
     },
     FIREWALL{
+        @Override
         public void cast(Position[] positions, Magician magician) {
             for (Position pos: positions) {
                 if (pos.getTaken() & (pos.getPositionNumber() % 2 == 0)) {
@@ -41,6 +45,7 @@ public enum Spell {
         }
     },
     FIRETOUCH{
+        @Override
         public void cast(Position[] positions, Magician magician) {
             Position magicianPosition = new Position();
 
@@ -61,6 +66,7 @@ public enum Spell {
         }
     },
     EXILEMONSTERS{
+        @Override
         public void cast(Position[] positions, Magician magician) {
             for (Position pos: positions) {
                 if (pos.getCharacter() instanceof Monster) {
@@ -73,6 +79,7 @@ public enum Spell {
         }
     },
     MIGRAINE{
+        @Override
         public void cast(Position[] positions, Magician magician) {
             for (Position pos: positions) {
                 pos.getCharacter().changeHitPoints(magician, -magician.getHitPower());
@@ -92,6 +99,7 @@ public enum Spell {
     public Boolean getSpelled() {
         return this.isBlocked;
     }
+
     private static void commonMessage(Character character, Magician magician) {
         System.out.println("Magician \"" + magician.getName() + "\" attack player \""+ character.getName() + "\" on " + magician.getHitPower() + " hp");
     }

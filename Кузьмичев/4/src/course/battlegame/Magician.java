@@ -28,10 +28,15 @@ public class Magician extends Character {
     }
 
     private void cast(Spell spell, Position[] positions) {
+        if(spell == null || positions == null){
+            return;
+        }
+
         System.out.println("Magician " + this.getName() + " cast spell " + spell.toString());
         spell.cast(positions, this);
     }
 
+    @Override
     void step(Position[] positions) {
         for (Spell sp : spells) {
             if (sp.getSpelled() && (new Random().nextBoolean())) {
@@ -43,6 +48,7 @@ public class Magician extends Character {
                     if (this.getHitPoints() < 20) {
                         cast(sp, positions);
                     }
+
                     break;
                 }
                 case LIGHTNING: {
@@ -65,11 +71,17 @@ public class Magician extends Character {
                     break;
                 }
             }
+
             break;
         }
     }
 
+    @Override
     protected void changeHitPoints(Character character, Integer hitPoints) {
+        if(character == null) {
+            return;
+        }
+
         this.hitPoints += hitPoints;
 
         if (this.hitPoints > this.maxHitPoint) {

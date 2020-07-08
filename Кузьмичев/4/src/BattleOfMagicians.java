@@ -11,6 +11,9 @@ public class BattleOfMagicians {
     private static Integer MAX_MAGICIAN_HEALTH;
     private static Integer MAX_MONSTERS_HEALTH;
 
+    private static Integer MIN_SPELLS_BOOK;
+    private static Integer MAX_SPELLS_BOOK;
+
     private static Integer MAX_GAME_STEPS;
 
     static {
@@ -19,6 +22,9 @@ public class BattleOfMagicians {
 
         BattleOfMagicians.MAX_MAGICIAN_HEALTH = 50;
         BattleOfMagicians.MAX_MONSTERS_HEALTH = 80;
+
+        BattleOfMagicians.MIN_SPELLS_BOOK = 1;
+        BattleOfMagicians.MAX_SPELLS_BOOK = 3;
 
         BattleOfMagicians.MAX_GAME_STEPS = 100;
     }
@@ -42,16 +48,20 @@ public class BattleOfMagicians {
     }
 
     private static void creationScene(Scene scene) {
+        if (scene == null) {
+            return;
+        }
+
         for (Integer i = 0; i < scene.getMaxPositions(); i++) {
             if (new Random().nextBoolean()) {
                 Monster monster = new Monster("monster" + i, BattleOfMagicians.MAX_MONSTERS_HEALTH);
                 if (scene.setCharacter(monster) == null){
-                    System.out.println("No place for\"" + monster.getName() + "\"");
+                    System.out.println("No place for \"" + monster.getName() + "\"");
                     break;
                 }
             }
             else {
-                Integer numSpells = new Random().nextInt(2) + 1;
+                Integer numSpells = new Random().nextInt(BattleOfMagicians.MAX_SPELLS_BOOK - BattleOfMagicians.MIN_SPELLS_BOOK) + BattleOfMagicians.MIN_SPELLS_BOOK;
                 Spell[] spells = new Spell[numSpells];
 
                 for (Integer j = 0; j < spells.length; j++)
@@ -62,11 +72,10 @@ public class BattleOfMagicians {
 
                 Magician magician = new Magician("mag" + i, BattleOfMagicians.MAX_MAGICIAN_HEALTH, spells);
                 if (scene.setCharacter(magician) == null){
-                    System.out.println("No place for\"" + magician.getName() + "\"");
+                    System.out.println("No place for \"" + magician.getName() + "\"");
                     break;
                 }
             }
         }
-
     }
 }

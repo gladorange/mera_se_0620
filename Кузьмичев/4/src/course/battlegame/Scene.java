@@ -1,15 +1,17 @@
 package course.battlegame;
 
+import com.sun.istack.internal.Nullable;
+
 public class Scene {
     private static Integer DEFAULT_NUM_POSITIONS;
     private final Integer maxPositions;
     private final Position[] battlefield;
-    private Integer currentCharacter;
+    private Integer currentCharacterPosition;
     private Boolean isEndGame;
 
     {
         Scene.DEFAULT_NUM_POSITIONS = 2;
-        this.currentCharacter = 0;
+        this.currentCharacterPosition = 0;
         this.isEndGame = false;
     }
 
@@ -36,10 +38,12 @@ public class Scene {
         return this.maxPositions;
     }
 
+    @Nullable
     public Character setCharacter(Character character) {
         return setCharacter(character, 0);
     }
 
+    @Nullable
     public Character getCharacter(String name) {
         for (Position pos: battlefield) {
             if(pos.getCharacter().getName().equals(name)) {
@@ -50,6 +54,7 @@ public class Scene {
         return null;
     }
 
+    @Nullable
     public Character getCharacter(Integer position) {
         if (battlefield[position].getTaken()) {
             return battlefield[position].getCharacter();
@@ -58,6 +63,7 @@ public class Scene {
         return null;
     }
 
+    @Nullable
     public Character setCharacter(Character character, Integer position) {
         if(!(position <= 0) & !battlefield[position].getTaken()) {
             battlefield[position].setCharacter(character);
@@ -78,6 +84,7 @@ public class Scene {
         return this.isEndGame;
     }
 
+    @Nullable
     private Position[] getAliveCharacters() {
         Integer alivePlayersNum = 0;
 
@@ -115,13 +122,18 @@ public class Scene {
             }
         }
 
-        Position position = battlefield[++currentCharacter % battlefield.length];
+        Position position = battlefield[++currentCharacterPosition % battlefield.length];
 
         while (!position.getTaken()) {
-            position = battlefield[++currentCharacter % battlefield.length];
+            position = battlefield[++currentCharacterPosition % battlefield.length];
         }
 
         Position[] alivePlayers = getAliveCharacters();
+
+        if(alivePlayers == null) {
+            System.out.println("No alive players");
+            return;
+        }
 
         if(alivePlayers.length == 1) {
             this.isEndGame = true;

@@ -1,5 +1,7 @@
 package course.battlegame;
 
+import com.sun.istack.internal.Nullable;
+
 public class Position {
     private Integer positionNumber;
     private Character character;
@@ -27,6 +29,7 @@ public class Position {
         return this.isTaken;
     }
 
+    @Nullable
     Character getCharacter() {
         return this.character;
     }
