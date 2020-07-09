@@ -11,7 +11,7 @@ public class StaticVariables {
         p.printHello();
         Person.DEFAULT_SURNAME = "Петров";
 
-      //  Person.DEFAULT_SURNAME = "Петров";
+      //  com.mera.another.Person.DEFAULT_SURNAME = "Петров";
         Person p2 = new Person("Vasya");
 
 

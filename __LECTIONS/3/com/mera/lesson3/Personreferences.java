@@ -8,7 +8,7 @@ public class Personreferences {
     public static void main(String[] args) {
         Person vasya = new Person("Вася", "Пупкин");
 
-      /*  com.mera.lesson3.Person petya = vasya;
+      /*  com.mera.lesson3.com.mera.another.Person petya = vasya;
         petya.name = "Петя";*/
 
         //vasya.printHello();
