@@ -91,8 +91,7 @@ public class Scene {
         }
     }
 
-    //implements the logic of choosing and performing action
-    //for the character
+    //implements the logic of choosing and performing action for the character
     private void performAction(GameCharacter character) {
         if (character instanceof Monster) {
             GameCharacter characterToAttack = findRandomTarget(character);
@@ -109,7 +108,7 @@ public class Scene {
         }
     }
 
-    //if target of monster's attack isn't alive, decrement counter of alive characters and set the character to null
+    //if target of monster's attack isn't alive, decrement counter of alive characters
     public void checkCharacterAfterAttack(GameCharacter character) {
         if (character.isAlive()) {
             System.out.println("Character " + character.getName() + "is alive. Health = " + character.getHealth());;
