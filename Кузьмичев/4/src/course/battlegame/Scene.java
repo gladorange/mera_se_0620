@@ -3,17 +3,11 @@ package course.battlegame;
 import com.sun.istack.internal.Nullable;
 
 public class Scene {
-    private static Integer DEFAULT_NUM_POSITIONS;
+    public static Integer DEFAULT_NUM_POSITIONS = 2;
     private final Integer maxPositions;
     private final Position[] battlefield;
-    private Integer currentCharacterPosition;
-    private Boolean isEndGame;
-
-    {
-        Scene.DEFAULT_NUM_POSITIONS = 2;
-        this.currentCharacterPosition = 0;
-        this.isEndGame = false;
-    }
+    private Integer currentCharacterPosition = 0;
+    private Boolean isEndGame = false;
 
     public Scene() {
         this(DEFAULT_NUM_POSITIONS);
@@ -39,11 +33,6 @@ public class Scene {
     }
 
     @Nullable
-    public Character setCharacter(Character character) {
-        return setCharacter(character, 0);
-    }
-
-    @Nullable
     public Character getCharacter(String name) {
         for (Position pos: battlefield) {
             if(pos.getCharacter().getName().equals(name)) {
@@ -64,19 +53,31 @@ public class Scene {
     }
 
     @Nullable
-    public Character setCharacter(Character character, Integer position) {
+    public Character addCharacter(Character character) {
+        return addCharacter(character, 0);
+    }
+
+    @Nullable
+    public Character addCharacter(Character character, Integer position) {
+        /**
+         * If position of the battlefield is free for new player then it may be created
+         */
         if(!(position <= 0) & !battlefield[position].getTaken()) {
             battlefield[position].setCharacter(character);
             return character;
         }
-
+        /**
+         * If position is not free for new player then start searching for free position
+         */
         for (Position pos: battlefield) {
             if (pos.getTaken().equals(false)) {
                 pos.setCharacter(character);
                 return character;
             }
         }
-
+        /**
+         *  If position is not founded then return null
+         */
         return null;
     }
 

@@ -1,11 +1,14 @@
 import course.ui.*;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Date;
 import java.util.Random;
 
 public class Task5{
     class NumberFormatException extends RuntimeException {
         NumberFormatException() {
-            System.out.println("Task5: Error input data.");
+            System.out.println(this.getClass().getSimpleName() + ": Error input data.");
         }
     }
 
@@ -30,6 +33,7 @@ public class Task5{
             }
             catch (UI.UIElementPositionException e)
             {
+                createLogMessage((new Date().toString()) + ": element was not created.");
             }
 
         }
@@ -37,7 +41,7 @@ public class Task5{
         Element[] arrayElements = ui.getAllElements();
 
         if (arrayElements == null) {
-            System.out.println("No elements");
+            System.out.println("No elements.");
             return;
         }
 
@@ -62,6 +66,17 @@ public class Task5{
             if (e instanceof TextField) {
                 System.out.println(((TextField) e).getText());
             }
+        }
+    }
+
+    private static void createLogMessage(String message) {
+        try {
+            FileWriter logFile = new FileWriter("log.txt", true);
+            logFile.append(message + "\r\n");
+            logFile.close();
+        }
+        catch (IOException e) {
+            System.out.println("Log: cannot be written.");
         }
     }
 }
