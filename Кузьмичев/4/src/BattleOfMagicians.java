@@ -5,29 +5,16 @@ import course.battlegame.Magician;
 import course.battlegame.Spell;
 
 public class BattleOfMagicians {
-    private static Integer MIN_CHARACTERS;
-    private static Integer MAX_CHARACTERS;
+    private static Integer MIN_CHARACTERS = 2;
+    private static Integer MAX_CHARACTERS = 10;
 
-    private static Integer MAX_MAGICIAN_HEALTH;
-    private static Integer MAX_MONSTERS_HEALTH;
+    private static Integer MAX_MAGICIAN_HEALTH = 50;
+    private static Integer MAX_MONSTERS_HEALTH = 80;
 
-    private static Integer MIN_SPELLS_BOOK;
-    private static Integer MAX_SPELLS_BOOK;
+    private static Integer MIN_SPELLS_BOOK = 1;
+    private static Integer MAX_SPELLS_BOOK = 3;
 
-    private static Integer MAX_GAME_STEPS;
-
-    static {
-        BattleOfMagicians.MIN_CHARACTERS = 2;
-        BattleOfMagicians.MAX_CHARACTERS = 10;
-
-        BattleOfMagicians.MAX_MAGICIAN_HEALTH = 50;
-        BattleOfMagicians.MAX_MONSTERS_HEALTH = 80;
-
-        BattleOfMagicians.MIN_SPELLS_BOOK = 1;
-        BattleOfMagicians.MAX_SPELLS_BOOK = 3;
-
-        BattleOfMagicians.MAX_GAME_STEPS = 100;
-    }
+    private static Integer MAX_GAME_STEPS = 100;
 
     public static void main(String[] args) {
         Scene game = new Scene(new Random().nextInt(
@@ -55,7 +42,7 @@ public class BattleOfMagicians {
         for (Integer i = 0; i < scene.getMaxPositions(); i++) {
             if (new Random().nextBoolean()) {
                 Monster monster = new Monster("monster" + i, BattleOfMagicians.MAX_MONSTERS_HEALTH);
-                if (scene.setCharacter(monster) == null){
+                if (scene.addCharacter(monster) == null){
                     System.out.println("No place for \"" + monster.getName() + "\"");
                     break;
                 }
@@ -71,7 +58,7 @@ public class BattleOfMagicians {
                 }
 
                 Magician magician = new Magician("mag" + i, BattleOfMagicians.MAX_MAGICIAN_HEALTH, spells);
-                if (scene.setCharacter(magician) == null){
+                if (scene.addCharacter(magician) == null){
                     System.out.println("No place for \"" + magician.getName() + "\"");
                     break;
                 }

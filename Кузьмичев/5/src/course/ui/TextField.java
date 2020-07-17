@@ -14,7 +14,6 @@ public class TextField extends Element {
     }
 
     public TextField(String text) {
-        super();
         this.text = text;
     }
 

@@ -4,7 +4,6 @@ public class Button extends Element implements Clickable {
     private ButtonClickCallback callback;
 
     public Button(ButtonClickCallback callback) {
-        super();
         this.callback = callback;
     }
 

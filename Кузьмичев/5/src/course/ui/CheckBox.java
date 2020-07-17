@@ -14,7 +14,6 @@ public class CheckBox extends Element implements Clickable {
     }
 
     public CheckBox(Boolean checked) {
-        super();
         this.checked = checked;
     }
 

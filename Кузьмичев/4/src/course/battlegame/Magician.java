@@ -5,13 +5,9 @@ import java.util.Random;
 public class Magician extends Character {
     private Spell[] spells;
     private Integer power;
-    private static Integer MIN_POWER;
-    private static Integer MAX_POWER;
-
-    {
-        Magician.MIN_POWER = 5;
-        Magician.MAX_POWER = 20;
-    }
+    private static Integer MIN_POWER = 5;
+    private static Integer MAX_POWER = 20;
+    private static Integer LOW_HEALTH = 20;
 
     public Magician(String name, Integer maxHitPoint, Spell[] spells) {
         super(name, maxHitPoint);
@@ -40,12 +36,13 @@ public class Magician extends Character {
     void step(Position[] positions) {
         for (Spell sp : spells) {
             if (sp.getSpelled() && (new Random().nextBoolean())) {
+                System.out.println(this.getName() + ": spell " + sp.toString() + " was casted bad");
                 continue;
             }
 
             switch (sp) {
                 case HEALLING: {
-                    if (this.getHitPoints() < 20) {
+                    if (this.getHitPoints() < Magician.LOW_HEALTH) {
                         cast(sp, positions);
                     }
 
