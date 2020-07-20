@@ -31,6 +31,11 @@ public enum EnumMonths {
         return days;
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
     private static final EnumMonths[] VALUES = values();
     private static final int SIZE = VALUES.length;
 
