@@ -4,14 +4,17 @@ public class Main {
 
     public static void main(String[] args) {
         UI scene = new UI(Parameters.parameters.SCENE_LENGHT_X.getValue(), Parameters.parameters.SCENE_LENGHT_Y.getValue());
-        AddElementOnClick one = new AddElementOnClick("one", 0, 0, 0, 1, scene);
-        scene.addElement(one);
+        AddElementOnClick addElementOnClick = new AddElementOnClick("'addElementOnClick'", 0, 0, 0, 0, scene);
+        scene.addElement(addElementOnClick);
 
         for(int i = 0; i < 10; i++){
-            one.onButtonClick();
+            addElementOnClick.onButtonClick();
         }
 
         for (Rectangle i : scene.getElementsOnScene()) {
+            if (i instanceof AddElementOnClick){
+                System.out.println(i + "\n");
+            }
             if (i instanceof TextField){
                 System.out.println(i);
                 System.out.println("Text is " + "'" + ((TextField) i).getText() + "'\n");

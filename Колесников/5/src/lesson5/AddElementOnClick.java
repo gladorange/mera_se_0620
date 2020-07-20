@@ -5,18 +5,25 @@ import java.util.Random;
 public class AddElementOnClick extends Rectangle implements ButtonClickCallback {
 
     private UI scene;
+    private TextField randomCoordinateX = new TextField("'randomCoordinateX'", 1,0,0,0, "");
+    private TextField randomCoordinateY = new TextField("'randomCoordinateY'", 2,0,0,0, "");
     private Random random = new Random();
 
     public AddElementOnClick(String caption, int elementCoordinateX, int elementCoordinateY, int heigthX, int widthY, UI scene) {
         super(caption, elementCoordinateX, elementCoordinateY, heigthX, widthY);
         this.scene = scene;
+        this.scene.addElement(randomCoordinateX);
+        this.scene.addElement(randomCoordinateY);
     }
 
     @Override
     public void onButtonClick(){
 
-        int elementCoordinateX = random.nextInt(Parameters.parameters.SCENE_LENGHT_X.getValue());
-        int elementCoordinateY = random.nextInt(Parameters.parameters.SCENE_LENGHT_Y.getValue());
+        randomCoordinateX.setText(String.valueOf(random.nextInt(Parameters.parameters.SCENE_LENGHT_X.getValue())));
+        randomCoordinateY.setText(String.valueOf(random.nextInt(Parameters.parameters.SCENE_LENGHT_Y.getValue())));
+
+        int elementCoordinateX = Integer.parseInt(randomCoordinateX.getText());
+        int elementCoordinateY = Integer.parseInt(randomCoordinateY.getText());
         int elementHeightX = random.nextInt(Parameters.parameters.ELEMENT_MAX_HIEGHT_X.getValue());
         int elementWidthY = random.nextInt(Parameters.parameters.ELEMENT_MAX_WIDTH_Y.getValue());
 
