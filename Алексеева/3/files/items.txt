@@ -1,0 +1,13 @@
+soap
+shampoo
+ball
+pen
+mug
+notebook
+pens
+notepad
+eraser
+pasta
+cookies
+umbrella
+socks
