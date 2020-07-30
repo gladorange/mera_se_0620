@@ -6,7 +6,7 @@ import java.util.Objects;
 public class Country {
     public static final String EMPTY_STRING = "";
 
-    @XmlName("Имя")
+    @XmlName("Название")
     String name;
     int population;
 
