@@ -1,10 +1,10 @@
-package course.battlegame.gameengine.sceneobjects.positionobjects.positiontype;
+package course.battlegame.gameengine.objects.positionobjects.positiontype;
 
 import course.battlegame.gameengine.transactions.ActionTransaction;
 
 import java.util.ArrayList;
 
-public class Mountain extends PositionType {
+public class Water extends PositionType {
     @Override
     public ArrayList<ActionTransaction> getEffectedTransactions(ArrayList<ActionTransaction> transactions) {
         return transactions;

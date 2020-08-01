@@ -1,8 +1,8 @@
-package course.battlegame.gameengine.sceneobjects;
+package course.battlegame.gameengine.objects;
 
-import course.battlegame.gameengine.effects.Effect;
-import course.battlegame.gameengine.sceneobjects.positionobjects.characters.Character;
-import course.battlegame.gameengine.sceneobjects.positionobjects.positiontype.PositionType;
+import course.battlegame.gameengine.objects.positionobjects.effects.Effect;
+import course.battlegame.gameengine.objects.positionobjects.characters.Character;
+import course.battlegame.gameengine.objects.positionobjects.positiontype.PositionType;
 
 import java.util.concurrent.ThreadLocalRandom;
 

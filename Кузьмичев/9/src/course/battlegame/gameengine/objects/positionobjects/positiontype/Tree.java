@@ -1,4 +1,4 @@
-package course.battlegame.gameengine.sceneobjects.positionobjects.positiontype;
+package course.battlegame.gameengine.objects.positionobjects.positiontype;
 
 import course.battlegame.gameengine.transactions.ActionTransaction;
 

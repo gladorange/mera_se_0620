@@ -1,9 +1,9 @@
-package course.battlegame.gameengine.sceneobjects.positionobjects.characters;
+package course.battlegame.gameengine.objects.positionobjects.characters;
 
 import course.battlegame.gameengine.actions.Weapon;
-import course.battlegame.gameengine.sceneobjects.Position;
-import course.battlegame.gameengine.sceneobjects.positionobjects.characters.charactersobjects.CharacterObject;
-import course.battlegame.gameengine.sceneobjects.positionobjects.characters.charactersobjects.Shield;
+import course.battlegame.gameengine.objects.Position;
+import course.battlegame.gameengine.objects.positionobjects.characters.charactersobjects.CharacterObject;
+import course.battlegame.gameengine.objects.positionobjects.characters.charactersobjects.Shield;
 import course.battlegame.gameengine.transactions.*;
 
 import java.util.ArrayList;

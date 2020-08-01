@@ -1,6 +1,6 @@
 package course.battlegame.gameengine.transactions;
 
-import course.battlegame.gameengine.sceneobjects.positionobjects.characters.Character;
+import course.battlegame.gameengine.objects.positionobjects.characters.Character;
 
 public abstract class ActionTransaction extends Transaction {
     private Character transactionCreator;

@@ -1,8 +1,8 @@
 package course.battlegame.gameengine.actions.closestrikes;
 
 import course.battlegame.gameengine.actions.Weapon;
-import course.battlegame.gameengine.sceneobjects.Position;
-import course.battlegame.gameengine.sceneobjects.positionobjects.characters.Character;
+import course.battlegame.gameengine.objects.Position;
+import course.battlegame.gameengine.objects.positionobjects.characters.Character;
 import course.battlegame.gameengine.transactions.ChangeHPTransaction;
 import course.battlegame.gameengine.transactions.InfoTransaction;
 import course.battlegame.gameengine.transactions.Transaction;

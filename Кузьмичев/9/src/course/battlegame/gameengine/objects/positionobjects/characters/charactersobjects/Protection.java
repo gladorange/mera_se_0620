@@ -1,4 +1,4 @@
-package course.battlegame.gameengine.sceneobjects.positionobjects.characters.charactersobjects;
+package course.battlegame.gameengine.objects.positionobjects.characters.charactersobjects;
 
 public abstract class Protection extends CharacterObject {
     private String name;

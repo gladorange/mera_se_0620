@@ -1,7 +1,7 @@
-package course.battlegame.gameengine.sceneobjects;
+package course.battlegame.gameengine.objects;
 
-import course.battlegame.gameengine.sceneobjects.positionobjects.characters.Character;
-import course.battlegame.gameengine.sceneobjects.positionobjects.positiontype.Field;
+import course.battlegame.gameengine.objects.positionobjects.characters.Character;
+import course.battlegame.gameengine.objects.positionobjects.positiontype.Field;
 import course.battlegame.gameengine.transactions.*;
 
 import java.util.ArrayDeque;

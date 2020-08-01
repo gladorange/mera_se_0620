@@ -3,10 +3,10 @@ package course.battlegame;
 import course.battlegame.gameengine.actions.Weapon;
 import course.battlegame.gameengine.actions.longrangestrikes.BowShot;
 import course.battlegame.gameengine.actions.spells.*;
-import course.battlegame.gameengine.sceneobjects.Scene;
-import course.battlegame.gameengine.sceneobjects.positionobjects.characters.Archer;
-import course.battlegame.gameengine.sceneobjects.positionobjects.characters.Monster;
-import course.battlegame.gameengine.sceneobjects.positionobjects.characters.Magician;
+import course.battlegame.gameengine.objects.Scene;
+import course.battlegame.gameengine.objects.positionobjects.characters.Archer;
+import course.battlegame.gameengine.objects.positionobjects.characters.Monster;
+import course.battlegame.gameengine.objects.positionobjects.characters.Magician;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;

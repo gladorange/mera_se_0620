@@ -1,12 +1,12 @@
-package course.battlegame.gameengine.sceneobjects.positionobjects.characters;
+package course.battlegame.gameengine.objects.positionobjects.characters;
 
 import course.battlegame.gameengine.actions.Weapon;
 import course.battlegame.gameengine.actions.WeaponDescriber;
 import course.battlegame.gameengine.actions.spells.Spell;
 import course.battlegame.gameengine.actions.spells.SpellsList;
-import course.battlegame.gameengine.sceneobjects.Position;
-import course.battlegame.gameengine.sceneobjects.positionobjects.characters.charactersobjects.CharacterObject;
-import course.battlegame.gameengine.sceneobjects.positionobjects.characters.charactersobjects.Shield;
+import course.battlegame.gameengine.objects.Position;
+import course.battlegame.gameengine.objects.positionobjects.characters.charactersobjects.CharacterObject;
+import course.battlegame.gameengine.objects.positionobjects.characters.charactersobjects.Shield;
 import course.battlegame.gameengine.transactions.ChangeHPTransaction;
 import course.battlegame.gameengine.transactions.ReplyTransaction;
 import course.battlegame.gameengine.transactions.InfoTransaction;

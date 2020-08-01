@@ -1,10 +1,10 @@
-package course.battlegame.gameengine.effects;
+package course.battlegame.gameengine.objects.positionobjects.effects;
 
 import course.battlegame.gameengine.transactions.ActionTransaction;
 
 import java.util.ArrayList;
 
-public class Night extends Effect {
+public class Heat extends Effect {
     @Override
     public ArrayList<ActionTransaction> getEffectedTransactions(ArrayList<ActionTransaction> transactions) {
         return transactions;

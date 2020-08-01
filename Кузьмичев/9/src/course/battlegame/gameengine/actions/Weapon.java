@@ -1,7 +1,7 @@
 package course.battlegame.gameengine.actions;
 
-import course.battlegame.gameengine.sceneobjects.Position;
-import course.battlegame.gameengine.sceneobjects.positionobjects.characters.Character;
+import course.battlegame.gameengine.objects.Position;
+import course.battlegame.gameengine.objects.positionobjects.characters.Character;
 import course.battlegame.gameengine.transactions.Transaction;
 
 import java.util.ArrayList;
