@@ -89,17 +89,20 @@ public class Scene {
             return;
         }
 
-        if (getAliveCharacters().size() == 0) {
+        if(battlefield.size() == 0 || getAliveCharacters().size() == 0) {
             System.out.println("No players.");
             return;
         }
 
-        currentPositionNumber = (currentPositionNumber + 1) % battlefield.size();
-        Position currentPosition = battlefield.get(currentPositionNumber);
+        Position currentPosition;
 
-        while (!currentPosition.getTaken()) {
+        while (true) {
             currentPositionNumber = (currentPositionNumber + 1) % battlefield.size();
             currentPosition = battlefield.get(currentPositionNumber);
+
+            if(currentPosition.getTaken()) {
+                break;
+            }
         }
 
         Queue<Transaction> actions = new ArrayDeque<>(currentPosition.getCharacter().act(getAliveCharacters()));
@@ -133,11 +136,11 @@ public class Scene {
                 }
 
                 if (transaction instanceof InfoTransaction) {
-                    if (transaction instanceof ReplyTransaction) {
-                        if (!((ReplyTransaction) transaction).getExecuted()) {
+                    if (transaction instanceof ReactionTransaction) {
+                        if (!((ReactionTransaction) transaction).getExecuted()) {
                             System.out.println(String.format(
                                     "Server \"%s\" | Error: %s ( %s ).",
-                                    name, ((ReplyTransaction) transaction).getMessage(), ((ReplyTransaction) transaction).getErrorTransaction()));
+                                    name, ((ReactionTransaction) transaction).getMessage(), ((ReactionTransaction) transaction).getErrorTransaction()));
                             isEndGame = true;
                             return;
                         }

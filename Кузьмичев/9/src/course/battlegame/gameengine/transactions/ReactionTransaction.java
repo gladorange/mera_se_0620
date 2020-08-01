@@ -1,10 +1,10 @@
 package course.battlegame.gameengine.transactions;
 
-public class ReplyTransaction extends InfoTransaction {
+public class ReactionTransaction extends InfoTransaction {
     private Transaction transaction;
     private Boolean isExecutedTransaction;
 
-    public ReplyTransaction(String message, Transaction transaction, Boolean isExecuted) {
+    public ReactionTransaction(String message, Transaction transaction, Boolean isExecuted) {
         super(message);
         this.transaction = transaction;
         this.isExecutedTransaction = isExecuted;

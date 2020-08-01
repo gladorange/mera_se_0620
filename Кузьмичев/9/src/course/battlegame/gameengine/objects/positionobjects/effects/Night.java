@@ -4,7 +4,7 @@ import course.battlegame.gameengine.transactions.ActionTransaction;
 
 import java.util.ArrayList;
 
-public class Night extends Effect {
+public class Night implements Effect {
     @Override
     public ArrayList<ActionTransaction> getEffectedTransactions(ArrayList<ActionTransaction> transactions) {
         return transactions;

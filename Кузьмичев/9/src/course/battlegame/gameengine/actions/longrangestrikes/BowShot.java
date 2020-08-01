@@ -1,6 +1,5 @@
 package course.battlegame.gameengine.actions.longrangestrikes;
 
-import course.battlegame.gameengine.actions.Weapon;
 import course.battlegame.gameengine.objects.Position;
 import course.battlegame.gameengine.objects.positionobjects.characters.Character;
 import course.battlegame.gameengine.transactions.ChangeHPTransaction;
@@ -9,7 +8,7 @@ import course.battlegame.gameengine.transactions.Transaction;
 
 import java.util.ArrayList;
 
-public class BowShot extends Weapon {
+public class BowShot extends LongRangeStrike {
     public BowShot() {
         super(LongRangeStrikesList.BOWSHOT);
     }

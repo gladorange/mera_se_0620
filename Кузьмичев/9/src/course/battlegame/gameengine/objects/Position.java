@@ -1,5 +1,7 @@
 package course.battlegame.gameengine.objects;
 
+import course.battlegame.annotations.XmlIgnore;
+import course.battlegame.annotations.XmlName;
 import course.battlegame.gameengine.objects.positionobjects.effects.Effect;
 import course.battlegame.gameengine.objects.positionobjects.characters.Character;
 import course.battlegame.gameengine.objects.positionobjects.positiontype.PositionType;
@@ -7,16 +9,26 @@ import course.battlegame.gameengine.objects.positionobjects.positiontype.Positio
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Position {
+    @XmlIgnore
     public static Integer DEFAULT_ID = 0;
+    @XmlIgnore
     public static Character DEFAULT_CHARACTER = null;
+    @XmlIgnore
     public static PositionType DEFAULT_POSITION_TYPE = null;
+    @XmlIgnore
     public static Effect DEFAULT_EFFECT = null;
+    @XmlIgnore
     public static Boolean DEFAULT_IS_TAKEN = false;
 
+    @XmlName("ID")
     private Integer id;
+    @XmlName("Character")
     private Character character;
+    @XmlName("PositionType")
     private PositionType positionType;
+    @XmlName("Effect")
     private Effect effect;
+    @XmlIgnore
     private Boolean isTaken;
 
     public Position() {

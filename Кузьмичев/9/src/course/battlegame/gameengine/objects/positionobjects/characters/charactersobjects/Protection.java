@@ -1,7 +1,11 @@
 package course.battlegame.gameengine.objects.positionobjects.characters.charactersobjects;
 
-public abstract class Protection extends CharacterObject {
+import course.battlegame.annotations.XmlName;
+
+public abstract class Protection extends Stuff {
+    @XmlName("Name")
     private String name;
+    @XmlName("Armor")
     private Integer armor;
 
     public Protection(String name, Integer armor) {
