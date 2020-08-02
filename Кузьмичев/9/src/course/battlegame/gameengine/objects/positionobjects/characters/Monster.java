@@ -3,7 +3,7 @@ package course.battlegame.gameengine.objects.positionobjects.characters;
 import course.battlegame.annotations.XmlIgnore;
 import course.battlegame.gameengine.actions.closestrikes.MonsterStrike;
 import course.battlegame.gameengine.objects.Position;
-import course.battlegame.gameengine.objects.positionobjects.characters.charactersobjects.Stuff;
+import course.battlegame.gameengine.objects.positionobjects.characters.stuff.Stuff;
 import course.battlegame.gameengine.transactions.*;
 
 import java.util.ArrayList;
@@ -50,28 +50,25 @@ public class Monster extends Character {
     }
 
     @Override
-    public ArrayList<Transaction> react(ArrayList<ActionTransaction> transactions) {
+    public ArrayList<Transaction> react(ActionTransaction transaction) {
         ArrayList<Transaction> reaction = new ArrayList<>();
 
-        for (Transaction transaction: transactions) {
-            if(transaction instanceof ChangeHPTransaction) {
-                Character attacker = ((ChangeHPTransaction) transaction).getActionCreator();
-                Integer hitPoints = ((ChangeHPTransaction) transaction).getHitPoints();
+        if (transaction instanceof ChangeHPTransaction) {
+            Character attacker = ((ChangeHPTransaction) transaction).getActionCreator();
+            Integer hitPoints = ((ChangeHPTransaction) transaction).getHitPoints();
 
-                if(attacker == null) {
-                    reaction.add(new ReactionTransaction("Attacker Null Pointer Exception.", transaction, false));
-                    continue;
-                }
-
-                setHitPoints(getHitPoints() + hitPoints);
-                reaction.add(new ReactionTransaction("SUCCESS", transaction, true));
-                reaction.add(new InfoTransaction(String.format("Monster \"%s\" got damage on %d hp.", getName(), hitPoints)));
-                continue;
+            if (attacker == null) {
+                reaction.add(new ReactionTransaction("Attacker Null Pointer Exception.", transaction, false));
+                return reaction;
             }
 
-            reaction.add(new ReactionTransaction("Bad Transaction.", transaction, false));
+            setHitPoints(getHitPoints() + hitPoints);
+            reaction.add(new ReactionTransaction("SUCCESS", transaction, true));
+            reaction.add(new InfoTransaction(String.format("Monster \"%s\" got damage on %d hp.", getName(), hitPoints)));
+            return reaction;
         }
 
+        reaction.add(new ReactionTransaction("Bad Transaction.", transaction, false));
         return reaction;
     }
 }

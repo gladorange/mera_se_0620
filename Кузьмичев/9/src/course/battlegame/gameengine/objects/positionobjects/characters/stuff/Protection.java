@@ -1,4 +1,4 @@
-package course.battlegame.gameengine.objects.positionobjects.characters.charactersobjects;
+package course.battlegame.gameengine.objects.positionobjects.characters.stuff;
 
 import course.battlegame.annotations.XmlName;
 

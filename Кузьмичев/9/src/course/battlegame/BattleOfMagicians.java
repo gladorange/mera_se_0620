@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class BattleOfMagicians {
-    private static Integer MIN_CHARACTERS = 15;
-    private static Integer MAX_CHARACTERS = 20;
+    private static Integer MIN_CHARACTERS = 2;
+    private static Integer MAX_CHARACTERS = 5;
 
     private static Integer MAX_MAGICIAN_HEALTH = 50;
     private static Integer MAX_MONSTER_HEALTH = 80;
@@ -25,22 +25,20 @@ public class BattleOfMagicians {
     private static Integer MAX_GAME_STEPS = 200;
 
     public static void main(String[] args) {
-        System.out.println("BattleOfMagicians Game. 2020 Author Nikolay Kuzmichev <kuzhexyz@gmail.com>");
+        System.out.println("Battle Of Magicians. 2020 Nikolay Kuzmichev <kuzhexyz@gmail.com>");
         Integer numOfPositions = ThreadLocalRandom.current().nextInt(MIN_CHARACTERS, MAX_CHARACTERS);
-        Scene game = new Scene("Avengers", numOfPositions);
+        Scene game = new Scene("Avengers");
 
-        System.out.println(String.format("Loading the server \"%s\" ...", game.getName()));
+        System.out.println(String.format("Creating the server \"%s\" ...", game.getName()));
         creationScene(game, numOfPositions);
-        System.out.println("Loading completed.");
+        System.out.println("Creating completed.");
 
         System.out.println("Starting the game.");
-        Integer stepCounter = 0;
-        while (++stepCounter <= MAX_GAME_STEPS) {
-            System.out.println(String.format("Step: %d - Alive Players: %d.", stepCounter, game.getNumOfAliveCharacters()));
+        Integer currentStep = 0;
+        while (++currentStep <= MAX_GAME_STEPS && !game.getEndGame()) {
+            System.out.println(String.format("Server \"%s\" | Step: %d - Alive Players: %d.",
+                    game.getName(), currentStep, game.getNumOfAliveCharacters()));
             game.gameMove();
-            if (game.getEndGame()) {
-                break;
-            }
         }
     }
 
@@ -70,21 +68,27 @@ public class BattleOfMagicians {
 
                 if(randomSpell == SpellsList.CHAINLIGHTNING) {
                     spells.add(new Chainlightning());
+                    continue;
                 }
                 if(randomSpell == SpellsList.ELILEMONSTER) {
                     spells.add(new ExileMonsters());
+                    continue;
                 }
                 if(randomSpell == SpellsList.FIRETOUCH) {
                     spells.add(new Firetouch());
+                    continue;
                 }
                 if(randomSpell == SpellsList.FIREWALL) {
                     spells.add(new Firewall());
+                    continue;
                 }
                 if(randomSpell == SpellsList.HEALLING) {
                     spells.add(new Healling());
+                    continue;
                 }
                 if(randomSpell == SpellsList.LIGHTNING) {
                     spells.add(new Lightning());
+                    continue;
                 }
                 if(randomSpell == SpellsList.MIGRAINE) {
                     spells.add(new Migraine());

@@ -4,8 +4,9 @@ import course.battlegame.annotations.XmlIgnore;
 import course.battlegame.annotations.XmlName;
 import course.battlegame.gameengine.objects.positionobjects.effects.Effect;
 import course.battlegame.gameengine.objects.positionobjects.characters.Character;
-import course.battlegame.gameengine.objects.positionobjects.positiontype.PositionType;
+import course.battlegame.gameengine.objects.positionobjects.positiontypes.PositionType;
 
+import java.util.HashSet;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Position {
@@ -31,6 +32,9 @@ public class Position {
     @XmlIgnore
     private Boolean isTaken;
 
+    @XmlIgnore
+    private HashSet<Integer> idPool;
+
     public Position() {
         this(DEFAULT_ID, DEFAULT_CHARACTER, DEFAULT_POSITION_TYPE, DEFAULT_EFFECT);
     }
@@ -53,6 +57,16 @@ public class Position {
         } else {
             this.id = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE - 1);
         }
+
+        if(idPool == null) {
+            idPool = new HashSet<>();
+        }
+
+        while (idPool.contains(this.id)) {
+            this.id = ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE - 1);
+        }
+
+        idPool.add(this.id);
 
         this.character = character;
 

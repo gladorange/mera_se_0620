@@ -3,11 +3,12 @@ package course.battlegame.gameengine.objects.positionobjects.characters;
 import course.battlegame.annotations.XmlIgnore;
 import course.battlegame.annotations.XmlName;
 import course.battlegame.gameengine.objects.Position;
-import course.battlegame.gameengine.objects.positionobjects.characters.charactersobjects.Stuff;
+import course.battlegame.gameengine.objects.positionobjects.characters.stuff.Stuff;
 import course.battlegame.gameengine.transactions.ActionTransaction;
 import course.battlegame.gameengine.transactions.Transaction;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -36,12 +37,25 @@ abstract public class Character {
     @XmlName("Stuff")
     private Stuff stuff;
 
+    @XmlIgnore
+    private static HashSet<Integer> idPool;
+
     Character(String name, Integer maxHitPoint, Integer power) {
         this(name, maxHitPoint, power, DEFAULT_STUFF);
     }
 
     Character(String name, Integer maxHitPoint, Integer power, Stuff stuff) {
-        this.id = ThreadLocalRandom.current().nextInt();
+        if(idPool == null) {
+            idPool = new HashSet<>();
+        }
+        this.id = ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE - 1);
+
+        while (idPool.contains(this.id)) {
+            this.id = ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE - 1);
+        }
+
+        idPool.add(this.id);
+
         this.name = name;
         this.hitPoints = maxHitPoint;
         this.maxHitPoint = maxHitPoint;
@@ -57,6 +71,7 @@ abstract public class Character {
             this.maxHitPoint = Character.DEFAULT_MAX_HP;
 
         }
+
         if (power <= 0) {
             this.power = DEFAULT_POWER;
         }
@@ -99,7 +114,7 @@ abstract public class Character {
         return stuff;
     }
 
-    abstract public ArrayList<Transaction> react(ArrayList<ActionTransaction> transactions);
+    abstract public ArrayList<Transaction> react(ActionTransaction transaction);
     abstract public ArrayList<Transaction> act(ArrayList<Position> positions);
 
     @Override
@@ -117,7 +132,6 @@ abstract public class Character {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, name, maxHitPoint, hitPoints, power, stuff);
     }
 }

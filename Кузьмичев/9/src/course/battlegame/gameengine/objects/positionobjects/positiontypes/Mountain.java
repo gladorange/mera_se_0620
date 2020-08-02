@@ -1,8 +1,8 @@
-package course.battlegame.gameengine.objects.positionobjects.effects;
+package course.battlegame.gameengine.objects.positionobjects.positiontypes;
 
 import course.battlegame.gameengine.transactions.ActionTransaction;
 
-public class Night implements Effect {
+public class Mountain extends PositionType {
     @Override
     public ActionTransaction getEffectedTransactions(ActionTransaction transaction) {
         return transaction;

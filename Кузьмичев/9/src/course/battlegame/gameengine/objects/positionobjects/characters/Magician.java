@@ -7,8 +7,8 @@ import course.battlegame.gameengine.actions.WeaponDescriber;
 import course.battlegame.gameengine.actions.spells.Spell;
 import course.battlegame.gameengine.actions.spells.SpellsList;
 import course.battlegame.gameengine.objects.Position;
-import course.battlegame.gameengine.objects.positionobjects.characters.charactersobjects.Stuff;
-import course.battlegame.gameengine.objects.positionobjects.characters.charactersobjects.Shield;
+import course.battlegame.gameengine.objects.positionobjects.characters.stuff.Stuff;
+import course.battlegame.gameengine.objects.positionobjects.characters.stuff.Shield;
 import course.battlegame.gameengine.transactions.ChangeHPTransaction;
 import course.battlegame.gameengine.transactions.ReactionTransaction;
 import course.battlegame.gameengine.transactions.InfoTransaction;
@@ -75,43 +75,40 @@ public class Magician extends Character {
     }
 
     @Override
-    public ArrayList<Transaction> react(ArrayList<ActionTransaction> transactions) {
+    public ArrayList<Transaction> react(ActionTransaction transaction) {
         ArrayList<Transaction> reaction = new ArrayList<>();
 
-        for (Transaction transaction: transactions) {
-            if(transaction instanceof ChangeHPTransaction) {
-                Character attacker = ((ChangeHPTransaction) transaction).getActionCreator();
-                Integer hitPoints = ((ChangeHPTransaction) transaction).getHitPoints();
+        if (transaction instanceof ChangeHPTransaction) {
+            Character attacker = transaction.getActionCreator();
+            Integer hitPoints = ((ChangeHPTransaction) transaction).getHitPoints();
 
-                if(attacker == null) {
-                    reaction.add(new ReactionTransaction("Attacker Null Pointer Exception.", transaction, false));
-                    continue;
-                }
-
-                reaction.add(new ReactionTransaction("SUCCESS", transaction, true));
-
-                if(hitPoints > 0) {
-                    setHitPoints(getHitPoints() + hitPoints);
-                    continue;
-                }
-
-                if (getStuff() instanceof Shield) {
-                    Integer correctedHitPoints = ((Shield) getStuff()).protect(hitPoints);
-                    setHitPoints(getHitPoints() + correctedHitPoints);
-
-                    reaction.add(new InfoTransaction(String.format("Magician \"%s\" protect self by shield.", getName())));
-                    reaction.add(new InfoTransaction(String.format("Magician \"%s\" got damage on %d hp.", getName(), correctedHitPoints)));
-                    continue;
-                }
-
-                setHitPoints(getHitPoints() + hitPoints);
-                reaction.add(new InfoTransaction(String.format("Magician \"%s\" got damage on %d hp.", getName(), hitPoints)));
-                continue;
+            if (attacker == null) {
+                reaction.add(new ReactionTransaction("Attacker Null Pointer Exception.", transaction, false));
+                return reaction;
             }
 
-            reaction.add(new ReactionTransaction("Bad Transaction.", transaction, false));
+            reaction.add(new ReactionTransaction("SUCCESS", transaction, true));
+
+            if (hitPoints > 0) {
+                setHitPoints(getHitPoints() + hitPoints);
+                return reaction;
+            }
+
+            if (getStuff() instanceof Shield) {
+                Integer correctedHitPoints = ((Shield) getStuff()).protect(hitPoints);
+                setHitPoints(getHitPoints() + correctedHitPoints);
+
+                reaction.add(new InfoTransaction(String.format("Magician \"%s\" protect self by shield.", getName())));
+                reaction.add(new InfoTransaction(String.format("Magician \"%s\" got damage on %d hp.", getName(), correctedHitPoints)));
+                return reaction;
+            }
+
+            setHitPoints(getHitPoints() + hitPoints);
+            reaction.add(new InfoTransaction(String.format("Magician \"%s\" got damage on %d hp.", getName(), hitPoints)));
+            return reaction;
         }
 
+        reaction.add(new ReactionTransaction("Bad Transaction.", transaction, false));
         return reaction;
     }
 }
