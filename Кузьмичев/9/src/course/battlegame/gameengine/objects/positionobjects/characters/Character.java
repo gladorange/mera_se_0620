@@ -9,18 +9,15 @@ import course.battlegame.gameengine.transactions.Transaction;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
-abstract public class Character {
+public abstract class Character {
     @XmlIgnore
     public static String DEFAULT_NAME = "NONAME";
     @XmlIgnore
     public static Integer DEFAULT_MIN_HP = 0;
-    @XmlIgnore
-    public static Integer DEFAULT_MAX_HP = 100;
-    @XmlIgnore
-    public static Integer DEFAULT_POWER = 1;
     @XmlIgnore
     public static Stuff DEFAULT_STUFF = null;
 
@@ -112,23 +109,18 @@ abstract public class Character {
     }
 
     abstract public ArrayList<Transaction> react(ActionTransaction transaction);
-    abstract public ArrayList<Transaction> act(ArrayList<Position> positions);
+    abstract public ArrayList<Transaction> act(Map<Position, Character> battlefield);
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Character character = (Character) o;
-        return Objects.equals(id, character.id) &&
-                Objects.equals(name, character.name) &&
-                Objects.equals(maxHitPoint, character.maxHitPoint) &&
-                Objects.equals(hitPoints, character.hitPoints) &&
-                Objects.equals(power, character.power) &&
-                Objects.equals(stuff, character.stuff);
+        return Objects.equals(id, character.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, maxHitPoint, hitPoints, power, stuff);
+        return Objects.hash(id);
     }
 }

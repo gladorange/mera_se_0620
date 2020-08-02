@@ -5,6 +5,7 @@ import course.battlegame.gameengine.objects.positionobjects.characters.Character
 import course.battlegame.gameengine.transactions.Transaction;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public abstract class Weapon{
     private WeaponDescriber describer;
@@ -31,5 +32,5 @@ public abstract class Weapon{
         weaponBlocked = state;
     }
 
-    public abstract ArrayList<Transaction> attack(ArrayList<Position>  positions, Character attacker);
+    public abstract ArrayList<Transaction> attack(Map<Position, Character>  battlefield, Character attacker);
 }

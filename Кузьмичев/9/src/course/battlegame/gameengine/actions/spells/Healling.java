@@ -7,6 +7,7 @@ import course.battlegame.gameengine.transactions.InfoTransaction;
 import course.battlegame.gameengine.transactions.Transaction;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Healling extends Spell {
     public Healling() {
@@ -14,7 +15,7 @@ public class Healling extends Spell {
     }
 
     @Override
-    public ArrayList<Transaction> attack(ArrayList<Position>  positions, Character attacker) {
+    public ArrayList<Transaction> attack(Map<Position, Character> battlefield, Character attacker) {
         ArrayList<Transaction> transactions = new ArrayList<>();
 
         if (getWeaponBlocked()) {

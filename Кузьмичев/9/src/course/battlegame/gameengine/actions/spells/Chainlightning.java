@@ -7,6 +7,7 @@ import course.battlegame.gameengine.transactions.InfoTransaction;
 import course.battlegame.gameengine.transactions.Transaction;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Chainlightning extends Spell {
     public Chainlightning() {
@@ -14,7 +15,7 @@ public class Chainlightning extends Spell {
     }
 
     @Override
-    public ArrayList<Transaction> attack(ArrayList<Position>  positions, Character attacker) {
+    public ArrayList<Transaction> attack(Map<Position, Character> battlefield, Character attacker) {
         ArrayList<Transaction> transactions = new ArrayList<>();
 
         if (getWeaponBlocked()) {
@@ -22,13 +23,16 @@ public class Chainlightning extends Spell {
             return transactions;
         }
 
-        for (Position position : positions) {
-            if (position.getCharacter() == attacker) {
+        for (Position position : battlefield.keySet()) {
+            Character target = battlefield.get(position);
+
+            if (target == attacker) {
                 continue;
             }
-            transactions.add(new ChangeHPTransaction(attacker, position.getCharacter(), -attacker.getPower()));
+
+            transactions.add(new ChangeHPTransaction(attacker, target, -attacker.getPower()));
             transactions.add(new InfoTransaction(String.format("Magician \"%s\" is attacking \"%s\" on %d hp.",
-                    attacker.getName(), position.getCharacter().getName(), attacker.getPower())));
+                    attacker.getName(), target.getName(), attacker.getPower())));
         }
 
         setWeaponBlocked(true);

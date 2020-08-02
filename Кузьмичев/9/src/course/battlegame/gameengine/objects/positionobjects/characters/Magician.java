@@ -16,6 +16,7 @@ import course.battlegame.gameengine.transactions.ActionTransaction;
 import course.battlegame.gameengine.transactions.Transaction;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Magician extends Character {
@@ -42,7 +43,7 @@ public class Magician extends Character {
         this.weapons = weapons;
     }
 
-    public ArrayList<Transaction> act(ArrayList<Position> positions) {
+    public ArrayList<Transaction> act(Map<Position, Character> battlefield) {
         ArrayList<Transaction> transactions = new ArrayList<>();
 
         for (Weapon weapon : weapons) {
@@ -55,7 +56,7 @@ public class Magician extends Character {
             }
 
             if (weapon.getWeaponBlocked()) {
-                transactions.addAll(weapon.attack(positions, this));
+                transactions.addAll(weapon.attack(battlefield, this));
                 break;
             }
 
@@ -65,11 +66,11 @@ public class Magician extends Character {
 
                 if(describer == SpellsList.HEALLING) {
                     if (getHitPoints() < LOW_HEALTH) {
-                        transactions.addAll(weapon.attack(positions, this));
+                        transactions.addAll(weapon.attack(battlefield, this));
                     }
                 }
 
-                transactions.addAll(weapon.attack(positions, this));
+                transactions.addAll(weapon.attack(battlefield, this));
                 break;
             }
 

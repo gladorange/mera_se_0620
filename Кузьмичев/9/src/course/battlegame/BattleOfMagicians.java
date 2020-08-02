@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class BattleOfMagicians {
-    private static Integer MIN_CHARACTERS = 2;
-    private static Integer MAX_CHARACTERS = 3;
+    private static Integer MIN_CHARACTERS = 5;
+    private static Integer MAX_CHARACTERS = 10;
 
     private static Integer MAX_MAGICIAN_HEALTH = 50;
     private static Integer MAX_MONSTER_HEALTH = 80;
@@ -37,9 +37,10 @@ public class BattleOfMagicians {
         creationScene(scene2, numOfPositions);
 
         System.out.println("Starting the game.");
+
         Integer currentStep = 0;
         while (++currentStep <= MAX_GAME_STEPS && !(scene1.getEndGame() && scene2.getEndGame())) {
-            System.out.println(String.format("Move: %d.", currentStep));
+            System.out.printf("Move: %d.\n", currentStep);
 
             if (!scene1.getEndGame()) {
                 scene1.gameMove();
@@ -56,7 +57,7 @@ public class BattleOfMagicians {
             return;
         }
 
-        System.out.println(String.format("Creating the server \"%s\" ...", scene.getName()));
+        System.out.printf("Creating the server \"%s\" ...\n", scene.getName());
 
         for (Integer i = 0; i < numOfPositions; i++) {
             if (ThreadLocalRandom.current().nextBoolean()) {
@@ -87,14 +88,14 @@ public class BattleOfMagicians {
                     spells.add(new Firewall());
                 } else if (randomSpell == SpellsList.HEALLING) {
                     spells.add(new Healling());
-                } else if(randomSpell == SpellsList.LIGHTNING) {
+                } else if (randomSpell == SpellsList.LIGHTNING) {
                     spells.add(new Lightning());
-                } else if(randomSpell == SpellsList.MIGRAINE) {
+                } else if (randomSpell == SpellsList.MIGRAINE) {
                     spells.add(new Migraine());
                 }
             }
 
-            Magician magician = new Magician("mag" + i, MAX_MAGICIAN_HEALTH, spells);
+            Magician magician = new Magician("magician" + i, MAX_MAGICIAN_HEALTH, spells);
             scene.addCharacter(magician);
         }
 

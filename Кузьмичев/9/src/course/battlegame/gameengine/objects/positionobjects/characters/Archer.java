@@ -11,6 +11,8 @@ import course.battlegame.gameengine.objects.positionobjects.characters.stuff.Shi
 import course.battlegame.gameengine.transactions.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Archer extends Character {
@@ -36,33 +38,39 @@ public class Archer extends Character {
     }
 
     @Override
-    public ArrayList<Transaction> act(ArrayList<Position> positions) {
+    public ArrayList<Transaction> act(Map<Position, Character> battlefield) {
         if(!(weapon instanceof LongRangeStrike) && !(weapon instanceof CloseStrike)) {
             ArrayList<Transaction> reaction = new ArrayList<>();
             reaction.add(new ReactionTransaction(String.format("I cannot use this weapon \"%s\"",
                     weapon.getDescriber().getName()), null, false));
             return reaction;
         }
-        
-        ArrayList<Position> defenderAndAttackerPosition = new ArrayList<>();
-        
-        while (true) {
-            Integer randomPositionNumber = ThreadLocalRandom.current().nextInt(positions.size());
 
-            if (positions.get(randomPositionNumber).getCharacter() != this) {
-                defenderAndAttackerPosition.add(positions.get(randomPositionNumber));
+        Map<Position, Character> defenderAndAttackerPositions = new HashMap<>();
 
-                for(Position position: positions) {
-                    if(position.getCharacter() == this) {
-                        defenderAndAttackerPosition.add(position);
-                        break;
-                    }
+        Position enemyPosition = null;
+
+        while (enemyPosition == null) {
+            Integer enemyPositionID = ThreadLocalRandom.current().nextInt(battlefield.keySet().size());
+
+            for (Position position : battlefield.keySet()) {
+                if (enemyPositionID.equals(0) && battlefield.get(position) != this) {
+                    enemyPosition = position;
                 }
+                enemyPositionID--;
+            }
+        }
+
+        defenderAndAttackerPositions.put(enemyPosition, battlefield.get(enemyPosition));
+
+        for (Position position : battlefield.keySet()) {
+            if (battlefield.get(position) == this) {
+                defenderAndAttackerPositions.put(position, this);
                 break;
             }
         }
-        
-        return weapon.attack(defenderAndAttackerPosition, this);
+
+        return weapon.attack(defenderAndAttackerPositions, this);
     }
 
     @Override

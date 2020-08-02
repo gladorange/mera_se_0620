@@ -7,6 +7,7 @@ import course.battlegame.gameengine.transactions.InfoTransaction;
 import course.battlegame.gameengine.transactions.Transaction;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MonsterStrike extends CloseStrike {
     public MonsterStrike() {
@@ -14,16 +15,19 @@ public class MonsterStrike extends CloseStrike {
     }
 
     @Override
-    public ArrayList<Transaction> attack(ArrayList<Position> positions, Character attacker) {
+    public ArrayList<Transaction> attack(Map<Position, Character> battlefield, Character attacker) {
         ArrayList<Transaction> transactions = new ArrayList<>();
 
-        for (Position position : positions) {
-            if (position.getCharacter() != attacker) {
-                transactions.add(new ChangeHPTransaction(attacker, position.getCharacter(), -attacker.getPower()));
+        for (Position position : battlefield.keySet()) {
+            Character target = battlefield.get(position);
+
+            if (target != attacker) {
+                transactions.add(new ChangeHPTransaction(attacker, target, -attacker.getPower()));
                 transactions.add(new InfoTransaction(String.format("Monster \"%s\" is attacking \"%s\" on %d hp.",
-                        attacker.getName(), position.getCharacter().getName(), attacker.getPower())));
+                        attacker.getName(), target.getName(), attacker.getPower())));
             }
         }
+
         return transactions;
     }
 }

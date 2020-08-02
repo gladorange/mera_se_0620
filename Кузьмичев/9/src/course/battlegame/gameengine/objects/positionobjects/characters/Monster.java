@@ -7,6 +7,8 @@ import course.battlegame.gameengine.objects.positionobjects.characters.stuff.Stu
 import course.battlegame.gameengine.transactions.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Monster extends Character {
@@ -28,25 +30,32 @@ public class Monster extends Character {
     }
 
     @Override
-    public ArrayList<Transaction> act(ArrayList<Position> positions) {
-        ArrayList<Position> defenderAndAttackerPosition = new ArrayList<>();
+    public ArrayList<Transaction> act(Map<Position, Character> battlefield) {
+        Map<Position, Character> defenderAndAttackerPositions = new HashMap<>();
 
-        while (true) {
-            Integer randomEnemyPositionNumber = ThreadLocalRandom.current().nextInt(positions.size());
+        Position enemyPosition = null;
 
-            if (positions.get(randomEnemyPositionNumber).getCharacter() != this) {
-                defenderAndAttackerPosition.add(positions.get(randomEnemyPositionNumber));
+        while (enemyPosition == null) {
+            Integer enemyPositionID = ThreadLocalRandom.current().nextInt(battlefield.keySet().size());
 
-                for(Position position: positions) {
-                    if(position.getCharacter() == this) {
-                        defenderAndAttackerPosition.add(position);
-                        break;
-                    }
+            for (Position position : battlefield.keySet()) {
+                if (enemyPositionID.equals(0) && battlefield.get(position) != this) {
+                    enemyPosition = position;
                 }
+                enemyPositionID--;
+            }
+        }
+
+        defenderAndAttackerPositions.put(enemyPosition, battlefield.get(enemyPosition));
+
+        for (Position position : battlefield.keySet()) {
+            if (battlefield.get(position) == this) {
+                defenderAndAttackerPositions.put(position, this);
                 break;
             }
         }
-        return (new MonsterStrike().attack(defenderAndAttackerPosition, this));
+
+        return (new MonsterStrike().attack(defenderAndAttackerPositions, this));
     }
 
     @Override
@@ -54,7 +63,7 @@ public class Monster extends Character {
         ArrayList<Transaction> reaction = new ArrayList<>();
 
         if (transaction instanceof ChangeHPTransaction) {
-            Character attacker = ((ChangeHPTransaction) transaction).getActionCreator();
+            Character attacker = transaction.getActionCreator();
             Integer hitPoints = ((ChangeHPTransaction) transaction).getHitPoints();
 
             if (attacker == null) {

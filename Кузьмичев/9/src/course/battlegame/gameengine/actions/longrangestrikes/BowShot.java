@@ -7,6 +7,7 @@ import course.battlegame.gameengine.transactions.InfoTransaction;
 import course.battlegame.gameengine.transactions.Transaction;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class BowShot extends LongRangeStrike {
     public BowShot() {
@@ -14,30 +15,35 @@ public class BowShot extends LongRangeStrike {
     }
 
     @Override
-    public ArrayList<Transaction> attack(ArrayList<Position>  positions, Character attacker) {
+    public ArrayList<Transaction> attack(Map<Position, Character> battlefield, Character attacker) {
         ArrayList<Transaction> transactions = new ArrayList<>();
 
-        Position archerPosition = new Position();
+        Position archerPosition = null;
 
-        for (Position position : positions) {
-            if (position.getCharacter() == attacker) {
+        for (Position position : battlefield.keySet()) {
+
+            if (battlefield.get(position) == attacker) {
                 archerPosition = position;
                 break;
             }
         }
 
-        if (!archerPosition.getTaken()) {
+        if (archerPosition == null) {
             return transactions;
         }
 
-        for (Position position : positions) {
-            if (Math.abs(position.getId() - archerPosition.getId()) >= 3) {
-                transactions.add(new ChangeHPTransaction(attacker, position.getCharacter(), -attacker.getPower()));
+        for (Position position : battlefield.keySet()) {
+            if (Math.abs(position.getPosition() - archerPosition.getPosition()) <= 10 &&
+                    Math.abs(position.getPosition() - archerPosition.getPosition()) > 0) {
+                Character target = battlefield.get(position);
+
+                transactions.add(new ChangeHPTransaction(attacker, target, -attacker.getPower()));
                 transactions.add(new InfoTransaction(String.format("Archer \"%s\" is attacking \"%s\" on %d hp.",
-                        attacker.getName(), position.getCharacter().getName(), attacker.getPower())));
+                        attacker.getName(), target.getName(), attacker.getPower())));
                 break;
             }
         }
+
         return transactions;
     }
 }

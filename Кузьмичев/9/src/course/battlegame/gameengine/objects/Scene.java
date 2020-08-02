@@ -1,51 +1,67 @@
 package course.battlegame.gameengine.objects;
 
 import course.battlegame.gameengine.objects.positionobjects.characters.Character;
-import course.battlegame.gameengine.objects.positionobjects.positiontypes.Field;
 import course.battlegame.gameengine.transactions.*;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Queue;
+import java.util.*;
 
 public class Scene {
-    private final String name;
-    private final ArrayList<Position> battlefield;
-    private Integer currentPositionNumber = 0;
+    private static Character DEFAULT_CHARACTER = null;
+
+    private String name;
+    private Map<Position, Character> battlefield;
+    private Integer currentPositionID = 0;
     private Integer numOfMissedMove = 0;
     private Boolean isEndGame = false;
 
     public Scene(String name) {
         this.name = name;
-        battlefield = new ArrayList<>();
+        battlefield = new HashMap<>();
     }
 
-    public void addCharacter(Character character) {
-        for (Position position : battlefield) {
-            if (!position.getTaken()) {
-                position.setCharacter(character);
+    public Integer addCharacter(Character newCharacter) {
+        for (Position position: battlefield.keySet()) {
+            if (battlefield.get(position) == DEFAULT_CHARACTER) {
+                battlefield.replace(position, newCharacter);
+                return position.getPosition();
             }
         }
 
-        battlefield.add(new Position(battlefield.size() + 1, character, new Field()));
+        Position newPosition = new Position(battlefield.size() + 1);
+        battlefield.put(newPosition, newCharacter);
+        return newPosition.getPosition();
     }
 
     public Boolean addCharacter(Character character, Integer newPositionID) {
-        if (newPositionID > 0 && !battlefield.get(newPositionID).getTaken()) {
-            battlefield.get(newPositionID - 1).setCharacter(character);
-            return true;
+        if (newPositionID <= 0) {
+            return false;
         }
+
+        Position newPosition = null;
+
+        for (Position position: battlefield.keySet()) {
+            if (position.getPosition().equals(newPositionID)) {
+                newPosition = position;
+            }
+        }
+
+        if ((newPosition != null) && (battlefield.get(newPosition) == DEFAULT_CHARACTER)) {
+                battlefield.replace(newPosition, character);
+                return true;
+        }
+
         return false;
     }
 
-    private ArrayList<Position> getAliveCharacters() {
-        ArrayList<Position> aliveCharacters = new ArrayList<>();
+    private Map<Position, Character> getAliveCharacters() {
+        Map<Position, Character> aliveCharacters = new HashMap<>();
 
-        for (Position position : battlefield) {
-            if (position.getTaken()) {
-                aliveCharacters.add(position);
+        for (Position position : battlefield.keySet()) {
+            if (battlefield.get(position) != DEFAULT_CHARACTER) {
+                aliveCharacters.put(position, battlefield.get(position));
             }
         }
+
         return aliveCharacters;
     }
 
@@ -63,45 +79,32 @@ public class Scene {
             return;
         }
 
-        if (battlefield.size() == 0 || getAliveCharacters().size() == 0) {
+        if (battlefield.size() == 0 || getAliveCharacters().keySet().size() == 0) {
             System.out.printf("Server \"%s\" | No players.\n", name);
             return;
         }
 
-        Position currentPosition;
+        Character currentCharacter = null;
 
-        while (true) {
-            currentPositionNumber = (currentPositionNumber + 1) % battlefield.size();
-            currentPosition = battlefield.get(currentPositionNumber);
-            if(currentPosition.getTaken()) {
-                break;
+        while (currentCharacter == null) {
+            currentPositionID = (currentPositionID + 1) % battlefield.keySet().size();
+
+            for (Position position: battlefield.keySet()) {
+                if (position.getPosition().equals(currentPositionID) && (battlefield.get(position) != DEFAULT_CHARACTER)) {
+                        currentCharacter = battlefield.get(position);
+                        break;
+                }
             }
         }
 
-        Queue<Transaction> actionsQueue = new ArrayDeque<>(currentPosition.getCharacter().act(getAliveCharacters()));
+        Queue<Transaction> actionsQueue = new ArrayDeque<>(currentCharacter.act(getAliveCharacters()));
 
         Boolean isExistActionTransaction = false;
 
-        for(Transaction transaction: actionsQueue) {
+        for (Transaction transaction: actionsQueue) {
             if(transaction instanceof ActionTransaction) {
                 isExistActionTransaction = true;
             }
-        }
-
-        if (!isExistActionTransaction) {
-            System.out.printf("Server \"%s\" | Current player \"%s\" missed a move.\n", name, currentPosition.getCharacter().getName());
-
-            numOfMissedMove++;
-
-            if (numOfMissedMove.equals(getAliveCharacters().size()) && numOfMissedMove > 1) {
-                isEndGame = true;
-                System.out.printf("Server \"%s\" | Standoff!\n", name);
-                for (Position players : getAliveCharacters()) {
-                    System.out.printf("Server \"%s\" | Remaining player - \"%s\"\n", name, players.getCharacter().getName());
-                }
-                System.out.printf("Server \"%s\" | Game Over!\n", name);
-            }
-            return;
         }
 
         while (!actionsQueue.isEmpty()) {
@@ -113,8 +116,8 @@ public class Scene {
 
                 Character defender = ((ActionTransaction) transaction).getActionGetter();
 
-                for (Position position : battlefield) {
-                    if (position.getCharacter() == defender) {
+                for (Position position : battlefield.keySet()) {
+                    if (battlefield.get(position) == defender) {
                         if (position.getPositionType() != null) {
                             transaction = position.getPositionType().getEffectedTransactions((ActionTransaction) transaction);
                         }
@@ -142,21 +145,45 @@ public class Scene {
                     continue;
                 }
 
-                System.out.printf("Server \"%s\" | Info: %s\n",
+                System.out.printf("Server \"%s\" | %s\n",
                         name, ((InfoTransaction) transaction).getMessage());
             }
         }
 
-        for (Position position : battlefield) {
-            if (position.getTaken() && position.getCharacter().getHitPoints().equals(0)) {
-                System.out.printf("Server \"%s\" | Player \"%s\" was killed.\n", name, position.getCharacter().getName());
-                position.removeCharacter();
+        if (!isExistActionTransaction) {
+            System.out.printf("Server \"%s\" | Player \"%s\" missed a move.\n", name, currentCharacter.getName());
+
+            numOfMissedMove++;
+
+            if (numOfMissedMove.equals(getAliveCharacters().size()) && numOfMissedMove > 1) {
+                isEndGame = true;
+
+                System.out.printf("Server \"%s\" | Standoff!\n", name);
+
+                for (Position position : getAliveCharacters().keySet()) {
+                    System.out.printf("Server \"%s\" | Remaining player - \"%s\"\n", name, battlefield.get(position).getName());
+                }
+
+                System.out.printf("Server \"%s\" | Game Over!\n", name);
+            }
+            return;
+        }
+
+        for (Position position : battlefield.keySet()) {
+            if ((battlefield.get(position) != DEFAULT_CHARACTER) && (battlefield.get(position).getHitPoints().equals(0))) {
+                System.out.printf("Server \"%s\" | Player \"%s\" was killed.\n", name, battlefield.get(position).getName());
+                battlefield.replace(position, DEFAULT_CHARACTER);
             }
         }
 
-        if (getAliveCharacters().size() == 1) {
+        Map<Position, Character> aliveCharacters = getAliveCharacters();
+
+        if (aliveCharacters.keySet().size() == 1) {
             isEndGame = true;
-            System.out.printf("Server \"%s\" | Player \"%s\" win!\n", name, getAliveCharacters().get(0).getCharacter().getName());
+
+            ArrayList<Character> winner = new ArrayList<>(aliveCharacters.values());
+
+            System.out.printf("Server \"%s\" | Player \"%s\" win!\n", name, winner.get(0).getName());
             System.out.printf("Server \"%s\" | Game Over!\n", name);
         }
     }
