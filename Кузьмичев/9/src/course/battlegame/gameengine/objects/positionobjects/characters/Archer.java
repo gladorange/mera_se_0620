@@ -15,9 +15,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Archer extends Character {
     @XmlIgnore
-    private static Integer MIN_POWER = 10;
+    private static Integer MIN_POWER = 15;
     @XmlIgnore
-    private static Integer MAX_POWER = 15;
+    private static Integer MAX_POWER = 25;
 
     @XmlName("Weapon")
     private Weapon weapon;
@@ -84,7 +84,7 @@ public class Archer extends Character {
                 Integer correctedHitPoints = ((Shield) getStuff()).protect(hitPoints);
                 setHitPoints(getHitPoints() + correctedHitPoints);
 
-                reaction.add(new InfoTransaction(String.format("Archer \"%s\" protect self by shield.", getName())));
+                reaction.add(new InfoTransaction(String.format("Archer \"%s\" protects self by shield.", getName())));
                 reaction.add(new InfoTransaction(String.format("Archer \"%s\" got damage on %d hp.", getName(), correctedHitPoints)));
                 return reaction;
             }

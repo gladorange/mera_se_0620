@@ -31,9 +31,8 @@ public class Position {
     private Effect effect;
     @XmlIgnore
     private Boolean isTaken;
-
     @XmlIgnore
-    private HashSet<Integer> idPool;
+    private static HashSet<Integer> idPool;
 
     public Position() {
         this(DEFAULT_ID, DEFAULT_CHARACTER, DEFAULT_POSITION_TYPE, DEFAULT_EFFECT);
@@ -58,12 +57,12 @@ public class Position {
             this.id = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE - 1);
         }
 
-        if(idPool == null) {
+        if (idPool == null) {
             idPool = new HashSet<>();
         }
 
         while (idPool.contains(this.id)) {
-            this.id = ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE - 1);
+            this.id = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE - 1);
         }
 
         idPool.add(this.id);
@@ -80,7 +79,7 @@ public class Position {
         return id;
     }
 
-    public void setId(Integer id) {
+    void setId(Integer id) {
         this.id = id;
     }
 
@@ -92,7 +91,7 @@ public class Position {
         return positionType;
     }
 
-    public void setPositionType(PositionType positionType) {
+    void setPositionType(PositionType positionType) {
         this.positionType = positionType;
     }
 
@@ -100,7 +99,7 @@ public class Position {
         return effect;
     }
 
-    public void setEffect(Effect effect) {
+    void setEffect(Effect effect) {
         this.effect = effect;
     }
 

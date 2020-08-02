@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Monster extends Character {
     @XmlIgnore
-    private static Integer MIN_POWER = 5;
+    private static Integer MIN_POWER = 10;
     @XmlIgnore
     private static Integer MAX_POWER = 20;
 

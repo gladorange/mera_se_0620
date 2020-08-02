@@ -33,7 +33,7 @@ public class BowShot extends LongRangeStrike {
         for (Position position : positions) {
             if (Math.abs(position.getId() - archerPosition.getId()) >= 3) {
                 transactions.add(new ChangeHPTransaction(attacker, position.getCharacter(), -attacker.getPower()));
-                transactions.add(new InfoTransaction(String.format("Archer \"%s\" attack \"%s\" on %d hp.",
+                transactions.add(new InfoTransaction(String.format("Archer \"%s\" is attacking \"%s\" on %d hp.",
                         attacker.getName(), position.getCharacter().getName(), attacker.getPower())));
                 break;
             }

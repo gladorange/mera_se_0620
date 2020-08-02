@@ -20,9 +20,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Magician extends Character {
     @XmlIgnore
-    private static Integer MIN_POWER = 5;
+    private static Integer MIN_POWER = 10;
     @XmlIgnore
-    private static Integer MAX_POWER = 20;
+    private static Integer MAX_POWER = 30;
     @XmlIgnore
     private static Integer LOW_HEALTH = 20;
 
@@ -47,16 +47,22 @@ public class Magician extends Character {
 
         for (Weapon weapon : weapons) {
             WeaponDescriber describer = weapon.getDescriber();
+            transactions.add(new InfoTransaction(String.format("Magician \"%s\" is trying use weapon \"%s\".", getName(), describer.getName())));
 
-            if (weapon.getWeaponBlocked() && ThreadLocalRandom.current().nextBoolean()) {
-                transactions.add(new InfoTransaction(String.format("%s: weapon \"%s\" was casted bad.", getName(), describer.getName())));
-                continue;
+            if (ThreadLocalRandom.current().nextBoolean()) {
+                transactions.add(new InfoTransaction(String.format("Magician \"%s\": \"%s\" used bad.", getName(), describer.getName())));
+                break;
             }
 
-            transactions.add(new InfoTransaction(String.format("Magician \"%s\" cast weapon \"%s\".", getName(), describer.getName())));
+            if (weapon.getWeaponBlocked()) {
+                transactions.addAll(weapon.attack(positions, this));
+                break;
+            }
 
-            if(weapon instanceof Spell)
+            if (weapon instanceof Spell)
             {
+                transactions.add(new InfoTransaction(String.format("Magician \"%s\" is casting spell \"%s\".", getName(), describer.getName())));
+
                 if(describer == SpellsList.HEALLING) {
                     if (getHitPoints() < LOW_HEALTH) {
                         transactions.addAll(weapon.attack(positions, this));
@@ -98,7 +104,7 @@ public class Magician extends Character {
                 Integer correctedHitPoints = ((Shield) getStuff()).protect(hitPoints);
                 setHitPoints(getHitPoints() + correctedHitPoints);
 
-                reaction.add(new InfoTransaction(String.format("Magician \"%s\" protect self by shield.", getName())));
+                reaction.add(new InfoTransaction(String.format("Magician \"%s\" protects self by shield.", getName())));
                 reaction.add(new InfoTransaction(String.format("Magician \"%s\" got damage on %d hp.", getName(), correctedHitPoints)));
                 return reaction;
             }

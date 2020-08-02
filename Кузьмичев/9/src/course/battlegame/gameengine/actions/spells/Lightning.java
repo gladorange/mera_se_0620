@@ -32,7 +32,7 @@ public class Lightning extends Spell {
         }
 
         transactions.add(new ChangeHPTransaction(attacker, healthiestPlayer.getCharacter(), -attacker.getPower()));
-        transactions.add(new InfoTransaction(String.format("Magician \"%s\" attack \"%s\" on %d hp.",
+        transactions.add(new InfoTransaction(String.format("Magician \"%s\" is attacking \"%s\" on %d hp.",
                 attacker.getName(),healthiestPlayer.getCharacter().getName(), attacker.getPower())));
 
         setWeaponBlocked(true);

@@ -20,7 +20,7 @@ public class MonsterStrike extends CloseStrike {
         for (Position position : positions) {
             if (position.getCharacter() != attacker) {
                 transactions.add(new ChangeHPTransaction(attacker, position.getCharacter(), -attacker.getPower()));
-                transactions.add(new InfoTransaction(String.format("Monster \"%s\" attack \"%s\" on %d hp.",
+                transactions.add(new InfoTransaction(String.format("Monster \"%s\" is attacking \"%s\" on %d hp.",
                         attacker.getName(), position.getCharacter().getName(), attacker.getPower())));
             }
         }

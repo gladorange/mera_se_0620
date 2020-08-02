@@ -13,32 +13,41 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class BattleOfMagicians {
     private static Integer MIN_CHARACTERS = 2;
-    private static Integer MAX_CHARACTERS = 5;
+    private static Integer MAX_CHARACTERS = 3;
 
     private static Integer MAX_MAGICIAN_HEALTH = 50;
     private static Integer MAX_MONSTER_HEALTH = 80;
-    private static Integer MAX_ARCHERS_HEALTH = 80;
+    private static Integer MAX_ARCHERS_HEALTH = 40;
 
     private static Integer MIN_SPELLS = 1;
-    private static Integer MAX_SPELLS = 4;
+    private static Integer MAX_SPELLS = 2;
 
     private static Integer MAX_GAME_STEPS = 200;
 
     public static void main(String[] args) {
         System.out.println("Battle Of Magicians. 2020 Nikolay Kuzmichev <kuzhexyz@gmail.com>");
-        Integer numOfPositions = ThreadLocalRandom.current().nextInt(MIN_CHARACTERS, MAX_CHARACTERS);
-        Scene game = new Scene("Avengers");
 
-        System.out.println(String.format("Creating the server \"%s\" ...", game.getName()));
-        creationScene(game, numOfPositions);
-        System.out.println("Creating completed.");
+        Scene scene1 = new Scene("Avengers");
+        Scene scene2 = new Scene("Defenders");
+
+        Integer numOfPositions = ThreadLocalRandom.current().nextInt(MIN_CHARACTERS, MAX_CHARACTERS);
+        creationScene(scene1, numOfPositions);
+
+        numOfPositions = ThreadLocalRandom.current().nextInt(MIN_CHARACTERS, MAX_CHARACTERS);
+        creationScene(scene2, numOfPositions);
 
         System.out.println("Starting the game.");
         Integer currentStep = 0;
-        while (++currentStep <= MAX_GAME_STEPS && !game.getEndGame()) {
-            System.out.println(String.format("Server \"%s\" | Step: %d - Alive Players: %d.",
-                    game.getName(), currentStep, game.getNumOfAliveCharacters()));
-            game.gameMove();
+        while (++currentStep <= MAX_GAME_STEPS && !(scene1.getEndGame() && scene2.getEndGame())) {
+            System.out.println(String.format("Move: %d.", currentStep));
+
+            if (!scene1.getEndGame()) {
+                scene1.gameMove();
+            }
+
+            if (!scene2.getEndGame()) {
+                scene2.gameMove();
+            }
         }
     }
 
@@ -46,6 +55,8 @@ public class BattleOfMagicians {
         if (scene == null) {
             return;
         }
+
+        System.out.println(String.format("Creating the server \"%s\" ...", scene.getName()));
 
         for (Integer i = 0; i < numOfPositions; i++) {
             if (ThreadLocalRandom.current().nextBoolean()) {
@@ -66,31 +77,19 @@ public class BattleOfMagicians {
             for (Integer j = 0; j < numOfSpells; j++) {
                 SpellsList randomSpell = SpellsList.values()[ThreadLocalRandom.current().nextInt(SpellsList.values().length)];
 
-                if(randomSpell == SpellsList.CHAINLIGHTNING) {
+                if (randomSpell == SpellsList.CHAINLIGHTNING) {
                     spells.add(new Chainlightning());
-                    continue;
-                }
-                if(randomSpell == SpellsList.ELILEMONSTER) {
+                } else if (randomSpell == SpellsList.ELILEMONSTER) {
                     spells.add(new ExileMonsters());
-                    continue;
-                }
-                if(randomSpell == SpellsList.FIRETOUCH) {
+                } else if (randomSpell == SpellsList.FIRETOUCH) {
                     spells.add(new Firetouch());
-                    continue;
-                }
-                if(randomSpell == SpellsList.FIREWALL) {
+                } else if (randomSpell == SpellsList.FIREWALL) {
                     spells.add(new Firewall());
-                    continue;
-                }
-                if(randomSpell == SpellsList.HEALLING) {
+                } else if (randomSpell == SpellsList.HEALLING) {
                     spells.add(new Healling());
-                    continue;
-                }
-                if(randomSpell == SpellsList.LIGHTNING) {
+                } else if(randomSpell == SpellsList.LIGHTNING) {
                     spells.add(new Lightning());
-                    continue;
-                }
-                if(randomSpell == SpellsList.MIGRAINE) {
+                } else if(randomSpell == SpellsList.MIGRAINE) {
                     spells.add(new Migraine());
                 }
             }
@@ -98,5 +97,7 @@ public class BattleOfMagicians {
             Magician magician = new Magician("mag" + i, MAX_MAGICIAN_HEALTH, spells);
             scene.addCharacter(magician);
         }
+
+        System.out.println("Creating completed.");
     }
 }

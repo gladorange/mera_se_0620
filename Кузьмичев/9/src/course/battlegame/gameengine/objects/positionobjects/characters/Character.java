@@ -36,7 +36,6 @@ abstract public class Character {
     private Integer power;
     @XmlName("Stuff")
     private Stuff stuff;
-
     @XmlIgnore
     private static HashSet<Integer> idPool;
 
@@ -45,7 +44,7 @@ abstract public class Character {
     }
 
     Character(String name, Integer maxHitPoint, Integer power, Stuff stuff) {
-        if(idPool == null) {
+        if (idPool == null) {
             idPool = new HashSet<>();
         }
         this.id = ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE - 1);
@@ -67,13 +66,11 @@ abstract public class Character {
         }
 
         if (maxHitPoint <= 0) {
-            this.hitPoints = Character.DEFAULT_MAX_HP;
-            this.maxHitPoint = Character.DEFAULT_MAX_HP;
-
+            throw new IllegalStateException("Character max HP less zero");
         }
 
         if (power <= 0) {
-            this.power = DEFAULT_POWER;
+            throw new IllegalStateException("Character power less zero");
         }
     }
 

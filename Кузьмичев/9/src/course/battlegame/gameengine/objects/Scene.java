@@ -12,20 +12,12 @@ public class Scene {
     private final String name;
     private final ArrayList<Position> battlefield;
     private Integer currentPositionNumber = 0;
+    private Integer numOfMissedMove = 0;
     private Boolean isEndGame = false;
 
     public Scene(String name) {
         this.name = name;
         battlefield = new ArrayList<>();
-    }
-
-    private Position getPosition(Character character) {
-        for (Position position : battlefield) {
-            if (position.getCharacter() == character) {
-                return position;
-            }
-        }
-        return null;
     }
 
     public void addCharacter(Character character) {
@@ -57,10 +49,6 @@ public class Scene {
         return aliveCharacters;
     }
 
-    public Integer getNumOfAliveCharacters() {
-        return getAliveCharacters().size();
-    }
-
     public Boolean getEndGame() {
         return isEndGame;
     }
@@ -75,7 +63,7 @@ public class Scene {
             return;
         }
 
-        if(battlefield.size() == 0 || getAliveCharacters().size() == 0) {
+        if (battlefield.size() == 0 || getAliveCharacters().size() == 0) {
             System.out.printf("Server \"%s\" | No players.\n", name);
             return;
         }
@@ -90,50 +78,73 @@ public class Scene {
             }
         }
 
-        Queue<Transaction> actions = new ArrayDeque<>(currentPosition.getCharacter().act(getAliveCharacters()));
+        Queue<Transaction> actionsQueue = new ArrayDeque<>(currentPosition.getCharacter().act(getAliveCharacters()));
 
-        if(!actions.isEmpty()) {
-            while (!actions.isEmpty()) {
-                Transaction transaction = actions.poll();
+        Boolean isExistActionTransaction = false;
 
-                if (transaction instanceof ActionTransaction) {
-                    Character defender = ((ActionTransaction) transaction).getActionGetter();
+        for(Transaction transaction: actionsQueue) {
+            if(transaction instanceof ActionTransaction) {
+                isExistActionTransaction = true;
+            }
+        }
 
-                   for (Position position : battlefield) {
-                        if (position.getCharacter() == defender) {
-                            if (position.getPositionType() != null) {
-                                transaction = position.getPositionType().getEffectedTransactions((ActionTransaction)transaction);
-                            }
-                            if (position.getEffect() != null) {
-                                transaction = position.getEffect().getEffectedTransactions((ActionTransaction)transaction);
-                            }
-                            break;
+        if (!isExistActionTransaction) {
+            System.out.printf("Server \"%s\" | Current player \"%s\" missed a move.\n", name, currentPosition.getCharacter().getName());
+
+            numOfMissedMove++;
+
+            if (numOfMissedMove.equals(getAliveCharacters().size()) && numOfMissedMove > 1) {
+                isEndGame = true;
+                System.out.printf("Server \"%s\" | Standoff!\n", name);
+                for (Position players : getAliveCharacters()) {
+                    System.out.printf("Server \"%s\" | Remaining player - \"%s\"\n", name, players.getCharacter().getName());
+                }
+                System.out.printf("Server \"%s\" | Game Over!\n", name);
+            }
+            return;
+        }
+
+        while (!actionsQueue.isEmpty()) {
+            numOfMissedMove = 0;
+
+            Transaction transaction = actionsQueue.poll();
+
+            if (transaction instanceof ActionTransaction) {
+
+                Character defender = ((ActionTransaction) transaction).getActionGetter();
+
+                for (Position position : battlefield) {
+                    if (position.getCharacter() == defender) {
+                        if (position.getPositionType() != null) {
+                            transaction = position.getPositionType().getEffectedTransactions((ActionTransaction) transaction);
                         }
+                        if (position.getEffect() != null) {
+                            transaction = position.getEffect().getEffectedTransactions((ActionTransaction) transaction);
+                        }
+                        break;
                     }
+                }
 
-                    ArrayList<Transaction> reaction = defender.react((ActionTransaction)transaction);
-                    actions.addAll(reaction);
+                ArrayList<Transaction> reaction = defender.react((ActionTransaction) transaction);
+                actionsQueue.addAll(reaction);
+                continue;
+            }
+
+            if (transaction instanceof InfoTransaction) {
+                if (transaction instanceof ReactionTransaction) {
+                    if (!((ReactionTransaction) transaction).getExecuted()) {
+                        System.out.printf(
+                                "Server \"%s\" | Error: %s ( %s ).\n",
+                                name, ((ReactionTransaction) transaction).getMessage(), ((ReactionTransaction) transaction).getErrorTransaction());
+                        isEndGame = true;
+                        return;
+                    }
                     continue;
                 }
 
-                if (transaction instanceof InfoTransaction) {
-                    if (transaction instanceof ReactionTransaction) {
-                        if (!((ReactionTransaction) transaction).getExecuted()) {
-                            System.out.printf(
-                                    "Server \"%s\" | Error: %s ( %s ).\n",
-                                    name, ((ReactionTransaction) transaction).getMessage(), ((ReactionTransaction) transaction).getErrorTransaction());
-                            isEndGame = true;
-                            return;
-                        }
-                        continue;
-                    }
-
-                    System.out.printf("Server \"%s\" | Info: %s\n",
-                            name, ((InfoTransaction) transaction).getMessage());
-                }
+                System.out.printf("Server \"%s\" | Info: %s\n",
+                        name, ((InfoTransaction) transaction).getMessage());
             }
-        } else {
-            System.out.printf("Server \"%s\" | Current player \"%s\" passed move.\n", name, currentPosition.getCharacter().getName());
         }
 
         for (Position position : battlefield) {

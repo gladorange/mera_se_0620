@@ -24,7 +24,7 @@ public class Migraine extends Spell {
 
         for (Position position : positions) {
             transactions.add(new ChangeHPTransaction(attacker, position.getCharacter(), -attacker.getPower()));
-            transactions.add(new InfoTransaction(String.format("Magician \"%s\" attack \"%s\" on %d hp.",
+            transactions.add(new InfoTransaction(String.format("Magician \"%s\" is attacking \"%s\" on %d hp.",
                     attacker.getName(), position.getCharacter().getName(), attacker.getPower())));
             break;
         }

@@ -23,7 +23,7 @@ public class Healling extends Spell {
         }
 
         transactions.add(new ChangeHPTransaction(attacker, attacker, attacker.getPower()));
-        transactions.add(new InfoTransaction(String.format("Magician \"%s\" healling himself on %d hp.",
+        transactions.add(new InfoTransaction(String.format("Magician \"%s\" is healling self on %d hp.",
                 attacker.getName(), attacker.getPower())));
 
         setWeaponBlocked(true);
