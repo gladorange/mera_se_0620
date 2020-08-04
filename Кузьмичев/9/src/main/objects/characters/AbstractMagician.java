@@ -1,10 +1,15 @@
+/*********************************************************
+ * File: AbstractMagician.java
+ * Purpose: Implements character
+ * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
+ ********************************************************/
+
 package main.objects.characters;
 
 import annotations.SaveIgnore;
 
 import main.actions.weapons.Weapon;
 
-import main.objects.Character;
 import main.objects.characters.stuff.Mantle;
 import main.objects.characters.stuff.Stuff;
 
@@ -17,7 +22,7 @@ import main.transactions.Transaction;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class Magician extends Character {
+public abstract class AbstractMagician extends AbstractCharacter {
     @SaveIgnore
     protected static Integer MIN_POWER = 10;
     @SaveIgnore
@@ -25,15 +30,15 @@ public abstract class Magician extends Character {
     @SaveIgnore
     protected static Integer LOW_HEALTH = 20;
 
-    protected Magician(String name, Integer maxHitPoint, ArrayList<Weapon> weapons) {
+    protected AbstractMagician(String name, Integer maxHitPoint, ArrayList<Weapon> weapons) {
         this(name, maxHitPoint, ThreadLocalRandom.current().nextInt(MIN_POWER, MAX_POWER), weapons, null);
     }
 
-    protected Magician(String name, Integer maxHitPoint, Integer power, ArrayList<Weapon> weapons) {
+    protected AbstractMagician(String name, Integer maxHitPoint, Integer power, ArrayList<Weapon> weapons) {
         this(name, maxHitPoint, power, weapons, null);
     }
 
-    protected Magician(String name, Integer maxHitPoint, Integer power, ArrayList<Weapon> weapons, Stuff stuff) {
+    protected AbstractMagician(String name, Integer maxHitPoint, Integer power, ArrayList<Weapon> weapons, Stuff stuff) {
         super(name, maxHitPoint, power, weapons, stuff);
     }
 
@@ -42,7 +47,7 @@ public abstract class Magician extends Character {
         ArrayList<Transaction> reaction = new ArrayList<>();
 
         if (transaction instanceof ChangeHPTransaction) {
-            Character attacker = transaction.getActionCreator();
+            AbstractCharacter attacker = transaction.getActionCreator();
             Integer hitPoints = ((ChangeHPTransaction) transaction).getHitPoints();
 
             if (attacker == null) {

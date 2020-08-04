@@ -1,3 +1,9 @@
+/*********************************************************
+ * File: Protection.java
+ * Purpose: Implements character stuff
+ * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
+ ********************************************************/
+
 package main.objects.characters.stuff;
 
 import annotations.SaveName;

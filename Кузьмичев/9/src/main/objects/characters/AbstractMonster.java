@@ -1,8 +1,13 @@
+/*********************************************************
+ * File: AbstractMonster.java
+ * Purpose: Implements character
+ * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
+ ********************************************************/
+
 package main.objects.characters;
 
 import annotations.SaveIgnore;
 
-import main.objects.Character;
 import main.objects.characters.stuff.Stuff;
 
 import main.transactions.ChangeHPTransaction;
@@ -14,21 +19,21 @@ import main.transactions.Transaction;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class Monster extends Character {
+public abstract class AbstractMonster extends AbstractCharacter {
     @SaveIgnore
     protected static Integer MIN_POWER = 10;
     @SaveIgnore
     protected static Integer MAX_POWER = 20;
 
-    protected Monster(String name, Integer maxHitPoint) {
+    protected AbstractMonster(String name, Integer maxHitPoint) {
         this(name, maxHitPoint, ThreadLocalRandom.current().nextInt(MIN_POWER, MAX_POWER), null);
     }
 
-    protected Monster(String name, Integer maxHitPoint, Integer power) {
+    protected AbstractMonster(String name, Integer maxHitPoint, Integer power) {
         this(name, maxHitPoint, power, null);
     }
 
-    protected Monster(String name, Integer maxHitPoint, Integer power, Stuff stuff) {
+    protected AbstractMonster(String name, Integer maxHitPoint, Integer power, Stuff stuff) {
         super(name, maxHitPoint, ThreadLocalRandom.current().nextInt(MIN_POWER, MAX_POWER), null, stuff);
     }
 
@@ -37,7 +42,7 @@ public abstract class Monster extends Character {
         ArrayList<Transaction> reaction = new ArrayList<>();
 
         if (transaction instanceof ChangeHPTransaction) {
-            Character attacker = transaction.getActionCreator();
+            AbstractCharacter attacker = transaction.getActionCreator();
             Integer hitPoints = ((ChangeHPTransaction) transaction).getHitPoints();
 
             if (attacker == null) {

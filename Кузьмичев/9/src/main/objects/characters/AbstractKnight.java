@@ -1,10 +1,15 @@
+/*********************************************************
+ * File: AbstractKnight.java
+ * Purpose: Implements character
+ * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
+ ********************************************************/
+
 package main.objects.characters;
 
 import annotations.SaveIgnore;
 
 import main.actions.weapons.Weapon;
 
-import main.objects.Character;
 import main.objects.characters.stuff.Shield;
 import main.objects.characters.stuff.Stuff;
 
@@ -17,21 +22,21 @@ import main.transactions.Transaction;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class Knight extends Character {
+public abstract class AbstractKnight extends AbstractCharacter {
     @SaveIgnore
     protected static Integer MIN_POWER = 15;
     @SaveIgnore
     protected static Integer MAX_POWER = 35;
 
-    protected Knight(String name, Integer maxHitPoint, ArrayList<Weapon> weapons) {
+    protected AbstractKnight(String name, Integer maxHitPoint, ArrayList<Weapon> weapons) {
         this(name, maxHitPoint, ThreadLocalRandom.current().nextInt(MIN_POWER, MAX_POWER), weapons, null);
     }
 
-    protected Knight(String name, Integer maxHitPoint, Integer power, ArrayList<Weapon> weapons) {
+    protected AbstractKnight(String name, Integer maxHitPoint, Integer power, ArrayList<Weapon> weapons) {
         this(name, maxHitPoint, power, weapons, null);
     }
 
-    protected Knight(String name, Integer maxHitPoint, Integer power, ArrayList<Weapon> weapons, Stuff stuff) {
+    protected AbstractKnight(String name, Integer maxHitPoint, Integer power, ArrayList<Weapon> weapons, Stuff stuff) {
         super(name, maxHitPoint, power, weapons, stuff);
     }
 
@@ -40,7 +45,7 @@ public abstract class Knight extends Character {
         ArrayList<Transaction> reaction = new ArrayList<>();
 
         if (transaction instanceof ChangeHPTransaction) {
-            Character attacker = transaction.getActionCreator();
+            AbstractCharacter attacker = transaction.getActionCreator();
             Integer hitPoints = ((ChangeHPTransaction) transaction).getHitPoints();
 
             if (attacker == null) {
@@ -54,13 +59,13 @@ public abstract class Knight extends Character {
                 Integer correctedHitPoints = ((Shield) getStuff()).protect(hitPoints);
                 setHitPoints(getHitPoints() + correctedHitPoints);
 
-                reaction.add(new InfoTransaction(String.format("Archer \"%s\" protects self by shield.", getName())));
-                reaction.add(new InfoTransaction(String.format("Archer \"%s\" got damage on %d hp.", getName(), correctedHitPoints)));
+                reaction.add(new InfoTransaction(String.format("Knight \"%s\" protects self by shield.", getName())));
+                reaction.add(new InfoTransaction(String.format("Knight \"%s\" got damage on %d hp.", getName(), correctedHitPoints)));
                 return reaction;
             }
 
             setHitPoints(getHitPoints() + hitPoints);
-            reaction.add(new InfoTransaction(String.format("Archer \"%s\" got damage on %d hp.", getName(), hitPoints)));
+            reaction.add(new InfoTransaction(String.format("Knight \"%s\" got damage on %d hp.", getName(), hitPoints)));
             return reaction;
         }
 

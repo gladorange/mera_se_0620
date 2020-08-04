@@ -1,3 +1,9 @@
+/*********************************************************
+ * File: Position.java
+ * Defines the position and its features
+ * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
+ ********************************************************/
+
 package main.objects;
 
 import annotations.SaveIgnore;
@@ -11,6 +17,8 @@ import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Position {
+    @SaveIgnore
+    private static Integer MIN_POSITION_NUMBER = 1;
     @SaveIgnore
     public static PositionType DEFAULT_POSITION_TYPE = null;
     @SaveIgnore
@@ -37,7 +45,7 @@ public class Position {
     }
 
     public Position(Integer position, PositionType positionType, Effect effect) {
-        if (position <= 0) {
+        if (position < MIN_POSITION_NUMBER) {
             throw new IllegalStateException("Position number less or equals zero");
         }
 
@@ -45,10 +53,10 @@ public class Position {
             idsPool = new HashSet<>();
         }
 
-        this.id = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE - 1);
+        this.id = ThreadLocalRandom.current().nextInt(MIN_POSITION_NUMBER, Integer.MAX_VALUE - 1);
 
         while (idsPool.contains(this.id)) {
-            this.id = ThreadLocalRandom.current().nextInt(1, Integer.MAX_VALUE - 1);
+            this.id = ThreadLocalRandom.current().nextInt(MIN_POSITION_NUMBER, Integer.MAX_VALUE - 1);
         }
 
         idsPool.add(this.id);

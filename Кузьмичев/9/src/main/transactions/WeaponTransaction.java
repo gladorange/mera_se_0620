@@ -1,24 +1,30 @@
+/*********************************************************
+ * File: WeaponTransaction.java
+ * Purpose: General class of weapon transactions
+ * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
+ ********************************************************/
+
 package main.transactions;
 
-import main.objects.Character;
+import main.objects.characters.AbstractCharacter;
 
 public abstract class WeaponTransaction extends ChangeCharacterTransaction {
-    private Character transactionCreator;
-    private Character transactionGetter;
+    private AbstractCharacter transactionCreator;
+    private AbstractCharacter transactionGetter;
 
     private Class weaponClass;
 
-    public WeaponTransaction(Character transactionCreator, Character transactionGetter, Class weaponClass) {
+    public WeaponTransaction(AbstractCharacter transactionCreator, AbstractCharacter transactionGetter, Class weaponClass) {
         this.transactionCreator = transactionCreator;
         this.transactionGetter = transactionGetter;
         this.weaponClass = weaponClass;
     }
 
-    public Character getActionCreator() {
+    public AbstractCharacter getActionCreator() {
         return transactionCreator;
     }
 
-    public Character getActionGetter() {
+    public AbstractCharacter getActionGetter() {
         return transactionGetter;
     }
 

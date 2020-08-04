@@ -1,3 +1,9 @@
+/*********************************************************
+ * File: SaveName.java
+ * Purpose: For game saves
+ * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
+ ********************************************************/
+
 package annotations;
 
 import java.lang.annotation.ElementType;

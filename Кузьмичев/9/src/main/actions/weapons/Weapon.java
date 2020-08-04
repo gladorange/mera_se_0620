@@ -1,10 +1,16 @@
+/***********************************************************
+ * File: Weapon.java
+ * Purpose: Abstract class for creation specific weapon type
+ * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
+ ***********************************************************/
+
 package main.actions.weapons;
 
 import main.actions.Action;
 import main.actions.ActionDescriber;
 
 import main.objects.Position;
-import main.objects.Character;
+import main.objects.characters.AbstractCharacter;
 
 import main.transactions.Transaction;
 
@@ -24,5 +30,5 @@ public abstract class Weapon extends Action {
 
     public abstract ActionDescriber getDescriber();
 
-    public abstract ArrayList<Transaction> attack(Map<Position, Character>  battlefield, Character attacker);
+    public abstract ArrayList<Transaction> attack(Map<Position, AbstractCharacter>  battlefield, AbstractCharacter attacker);
 }

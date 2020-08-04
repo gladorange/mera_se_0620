@@ -1,3 +1,9 @@
+/*********************************************************
+ * File: SpellsList.java
+ * Purpose: Enum for name and description of spells
+ * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
+ ********************************************************/
+
 package main.actions.weapons.spells;
 
 import main.actions.ActionDescriber;

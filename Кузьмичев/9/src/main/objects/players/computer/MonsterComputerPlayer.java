@@ -1,10 +1,16 @@
+/*********************************************************
+ * File: MonsterComputerPlayer.java
+ * Purpose: Implements action for a specific character
+ * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
+ ********************************************************/
+
 package main.objects.players.computer;
 
 import main.actions.weapons.material.MonsterStrike;
 
-import main.objects.Character;
+import main.objects.characters.AbstractCharacter;
 import main.objects.Position;
-import main.objects.characters.Monster;
+import main.objects.characters.AbstractMonster;
 import main.objects.characters.stuff.Stuff;
 import main.objects.players.ComputerPlayer;
 
@@ -15,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class MonsterComputerPlayer extends Monster implements ComputerPlayer {
+public class MonsterComputerPlayer extends AbstractMonster implements ComputerPlayer {
     public MonsterComputerPlayer(String name, Integer maxHitPoint) {
         super(name, maxHitPoint);
     }
@@ -29,7 +35,7 @@ public class MonsterComputerPlayer extends Monster implements ComputerPlayer {
     }
 
     @Override
-    public ArrayList<Transaction> act(Map<Position, Character> battlefield) {
+    public ArrayList<Transaction> act(Map<Position, AbstractCharacter> battlefield) {
         Position enemyPosition = null;
 
         while (enemyPosition == null) {
@@ -43,7 +49,7 @@ public class MonsterComputerPlayer extends Monster implements ComputerPlayer {
             }
         }
 
-        Map<Position, Character> enemyAndMe = new HashMap<>();
+        Map<Position, AbstractCharacter> enemyAndMe = new HashMap<>();
         enemyAndMe.put(enemyPosition, battlefield.get(enemyPosition));
 
         for (Position position : battlefield.keySet()) {

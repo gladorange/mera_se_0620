@@ -1,10 +1,15 @@
+/*********************************************************
+ * File: AbstractArcher.java
+ * Purpose: Implements character
+ * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
+ ********************************************************/
+
 package main.objects.characters;
 
 import annotations.SaveIgnore;
 
 import main.actions.weapons.Weapon;
 
-import main.objects.Character;
 import main.objects.characters.stuff.Stuff;
 
 import main.transactions.Transaction;
@@ -16,21 +21,21 @@ import main.transactions.ReactionTransaction;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class Archer extends Character {
+public abstract class AbstractArcher extends AbstractCharacter {
     @SaveIgnore
     protected static Integer MIN_POWER = 15;
     @SaveIgnore
     protected static Integer MAX_POWER = 25;
 
-    protected Archer(String name, Integer maxHitPoint, ArrayList<Weapon> weapons) {
+    protected AbstractArcher(String name, Integer maxHitPoint, ArrayList<Weapon> weapons) {
         this(name, maxHitPoint, ThreadLocalRandom.current().nextInt(MIN_POWER, MAX_POWER), weapons, null);
     }
 
-    protected Archer(String name, Integer maxHitPoint, Integer power, ArrayList<Weapon> weapons) {
+    protected AbstractArcher(String name, Integer maxHitPoint, Integer power, ArrayList<Weapon> weapons) {
         this(name, maxHitPoint, power, weapons, null);
     }
 
-    protected Archer(String name, Integer maxHitPoint, Integer power, ArrayList<Weapon> weapons, Stuff stuff) {
+    protected AbstractArcher(String name, Integer maxHitPoint, Integer power, ArrayList<Weapon> weapons, Stuff stuff) {
         super(name, maxHitPoint, power, weapons, stuff);
     }
 
@@ -39,7 +44,7 @@ public abstract class Archer extends Character {
         ArrayList<Transaction> reaction = new ArrayList<>();
 
         if (transaction instanceof ChangeHPTransaction) {
-            Character attacker = transaction.getActionCreator();
+            AbstractCharacter attacker = transaction.getActionCreator();
             Integer hitPoints = ((ChangeHPTransaction) transaction).getHitPoints();
 
             if (attacker == null) {

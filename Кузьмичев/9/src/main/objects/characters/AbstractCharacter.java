@@ -1,10 +1,17 @@
-package main.objects;
+/*********************************************************
+ * File: AbstractCharacter.java
+ * Purpose: Implements character
+ * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
+ ********************************************************/
+
+package main.objects.characters;
 
 import annotations.SaveIgnore;
 import annotations.SaveName;
 
 import main.actions.weapons.Weapon;
 
+import main.objects.Position;
 import main.objects.characters.stuff.Stuff;
 
 import main.transactions.WeaponTransaction;
@@ -16,7 +23,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class Character {
+public abstract class AbstractCharacter {
     @SaveIgnore
     public static Integer DEFAULT_MIN_HP = 0;
     @SaveIgnore
@@ -42,11 +49,11 @@ public abstract class Character {
     @SaveName("Stuff")
     private Stuff stuff;
 
-    protected Character(String name, Integer maxHitPoint, Integer power) {
+    protected AbstractCharacter(String name, Integer maxHitPoint, Integer power) {
         this(name, maxHitPoint, power, DEFAULT_WEAPONS, DEFAULT_STUFF);
     }
 
-    protected Character(String name, Integer maxHitPoint, Integer power, ArrayList<Weapon> weapons, Stuff stuff) {
+    protected AbstractCharacter(String name, Integer maxHitPoint, Integer power, ArrayList<Weapon> weapons, Stuff stuff) {
         if (name == null) {
             throw new IllegalStateException("Character name is null pointer");
         }
@@ -126,13 +133,13 @@ public abstract class Character {
     }
 
     abstract public ArrayList<Transaction> react(WeaponTransaction transaction);
-    abstract public ArrayList<Transaction> act(Map<Position, Character> battlefield);
+    abstract public ArrayList<Transaction> act(Map<Position, AbstractCharacter> battlefield);
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Character character = (Character) o;
+        AbstractCharacter character = (AbstractCharacter) o;
         return Objects.equals(id, character.id);
     }
 

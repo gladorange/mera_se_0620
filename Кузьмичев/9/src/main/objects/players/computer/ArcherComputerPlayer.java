@@ -1,11 +1,17 @@
+/*********************************************************
+ * File: ArcherComputerPlayer.java
+ * Purpose: Implements action for a specific character
+ * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
+ ********************************************************/
+
 package main.objects.players.computer;
 
 import main.actions.weapons.Weapon;
 import main.actions.weapons.properties.LongRangeProperty;
 
-import main.objects.Character;
+import main.objects.characters.AbstractCharacter;
 import main.objects.Position;
-import main.objects.characters.Archer;
+import main.objects.characters.AbstractArcher;
 import main.objects.characters.stuff.Stuff;
 import main.objects.players.ComputerPlayer;
 
@@ -17,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class ArcherComputerPlayer extends Archer implements ComputerPlayer {
+public class ArcherComputerPlayer extends AbstractArcher implements ComputerPlayer {
 
     public ArcherComputerPlayer(String name, Integer maxHitPoint, ArrayList<Weapon> weapons) {
         super(name, maxHitPoint, weapons);
@@ -32,7 +38,7 @@ public class ArcherComputerPlayer extends Archer implements ComputerPlayer {
     }
 
     @Override
-    public ArrayList<Transaction> act(Map<Position, Character> battlefield) {
+    public ArrayList<Transaction> act(Map<Position, AbstractCharacter> battlefield) {
         ArrayList<Transaction> transactions = new ArrayList<>();
 
         if ((getWeapons() == null) | (getWeapons().size() == 0)) {
@@ -63,7 +69,7 @@ public class ArcherComputerPlayer extends Archer implements ComputerPlayer {
             }
         }
 
-        Map<Position, Character> enemyAndMe = new HashMap<>();
+        Map<Position, AbstractCharacter> enemyAndMe = new HashMap<>();
         enemyAndMe.put(enemyPosition, battlefield.get(enemyPosition));
 
         for (Position position : battlefield.keySet()) {

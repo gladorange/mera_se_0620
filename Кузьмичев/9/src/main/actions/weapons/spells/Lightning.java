@@ -1,3 +1,9 @@
+/*****************************************************************************
+ * File: Lightning.java
+ * Purpose: For creation scene transactions depending on weapon implementation
+ * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
+ *****************************************************************************/
+
 package main.actions.weapons.spells;
 
 import main.actions.ActionDescriber;
@@ -6,7 +12,7 @@ import main.actions.weapons.Weapon;
 import main.actions.weapons.properties.SpellProperty;
 
 import main.objects.Position;
-import main.objects.Character;
+import main.objects.characters.AbstractCharacter;
 
 import main.transactions.ChangeHPTransaction;
 import main.transactions.InfoTransaction;
@@ -15,23 +21,31 @@ import main.transactions.Transaction;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * Weapon implementation
+ *
+ * Name: Lightning
+ * Target: Any character
+ * Damage : Depends on character
+ * Properties: Spell
+ */
+
 public class Lightning extends Weapon implements SpellProperty {
     public ActionDescriber getDescriber() {
         return SpellsList.CHAINLIGHTNING;
     }
 
     @Override
-    public ArrayList<Transaction> attack(Map<Position, Character> battlefield, Character attacker) {
+    public ArrayList<Transaction> attack(Map<Position, AbstractCharacter> battlefield, AbstractCharacter attacker) {
         ArrayList<Transaction> transactions = new ArrayList<>();
 
         if (getBlocked()) {
-            String message = String.format("SpellProperty \"%s\" has been casted by the character already.", getDescriber().getName());
+            String message = String.format("Spell \"%s\" has been casted by the character already.", getDescriber().getName());
             transactions.add(new InfoTransaction(message));
             return transactions;
         }
 
-
-        Character target = new ArrayList<>(battlefield.values()).get(0);
+        AbstractCharacter target = new ArrayList<>(battlefield.values()).get(0);
 
         for (Position position : battlefield.keySet()) {
             if (battlefield.get(position).getHitPoints() > target.getHitPoints() && target != attacker) {

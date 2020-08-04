@@ -1,5 +1,12 @@
+/*********************************************************
+ * File: Scene.java
+ * Purpose: Provides character interaction
+ * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
+ ********************************************************/
+
 package main.objects;
 
+import main.objects.characters.AbstractCharacter;
 import main.transactions.ChangeCharacterTransaction;
 import main.transactions.ReactionTransaction;
 import main.transactions.InfoTransaction;
@@ -9,12 +16,12 @@ import main.transactions.Transaction;
 import java.util.*;
 
 public class Scene {
-    private static Character NO_CHARACTER = null;
+    private static AbstractCharacter NO_CHARACTER = null;
 
     private String name;
     private Boolean isEndGame = false;
 
-    private Map<Position, Character> battlefield;
+    private Map<Position, AbstractCharacter> battlefield;
     private Integer currentPositionNumber = 0;
     private Integer numberOfMissedMove = 0;
 
@@ -23,7 +30,7 @@ public class Scene {
         battlefield = new HashMap<>();
     }
 
-    public Integer addCharacter(Character newCharacter) {
+    public Integer addCharacter(AbstractCharacter newCharacter) {
         for (Position position: battlefield.keySet()) {
             if (battlefield.get(position) == NO_CHARACTER) {
                 battlefield.replace(position, newCharacter);
@@ -36,7 +43,7 @@ public class Scene {
         return newPosition.getPosition();
     }
 
-    public Boolean addCharacter(Character character, Integer newPositionNumber) {
+    public Boolean addCharacter(AbstractCharacter character, Integer newPositionNumber) {
         if (newPositionNumber <= 0) {
             return false;
         }
@@ -65,8 +72,8 @@ public class Scene {
         return false;
     }
 
-    private Map<Position, Character> getAliveCharacters() {
-        Map<Position, Character> aliveCharacters = new HashMap<>();
+    private Map<Position, AbstractCharacter> getAliveCharacters() {
+        Map<Position, AbstractCharacter> aliveCharacters = new HashMap<>();
 
         for (Position position : battlefield.keySet()) {
             if (battlefield.get(position) != NO_CHARACTER) {
@@ -109,7 +116,7 @@ public class Scene {
         return false;
     }
 
-    private Character getCurrentCharacter() {
+    private AbstractCharacter getCurrentCharacter() {
         while (true) {
             currentPositionNumber = (currentPositionNumber + 1) % battlefield.keySet().size();
 
@@ -123,12 +130,12 @@ public class Scene {
     }
 
     private Boolean verifyEndGame() {
-        Map<Position, Character> aliveCharacters = getAliveCharacters();
+        Map<Position, AbstractCharacter> aliveCharacters = getAliveCharacters();
 
         if (aliveCharacters.keySet().size() == 1) {
             isEndGame = true;
 
-            ArrayList<Character> winner = new ArrayList<>(aliveCharacters.values());
+            ArrayList<AbstractCharacter> winner = new ArrayList<>(aliveCharacters.values());
 
             System.out.printf("Server \"%s\" | Player \"%s\" win!\n",
                     name,
@@ -158,7 +165,7 @@ public class Scene {
         return false;
     }
 
-    private Boolean checkExistChangeCharacterTransaction(Collection<Transaction> actions, Character currentCharacter) {
+    private Boolean checkExistChangeCharacterTransaction(Collection<Transaction> actions, AbstractCharacter currentCharacter) {
         for (Transaction transaction: actions) {
             if (transaction instanceof ChangeCharacterTransaction) {
                 return true;
@@ -184,7 +191,7 @@ public class Scene {
             return;
         }
 
-        Character currentCharacter = getCurrentCharacter();
+        AbstractCharacter currentCharacter = getCurrentCharacter();
 
         Queue<Transaction> actionsQueue = new ArrayDeque<>(currentCharacter.act(getAliveCharacters()));
 
@@ -198,7 +205,7 @@ public class Scene {
             Transaction transaction = actionsQueue.poll();
 
             if (transaction instanceof WeaponTransaction) {
-                Character defender = ((WeaponTransaction) transaction).getActionGetter();
+                AbstractCharacter defender = ((WeaponTransaction) transaction).getActionGetter();
 
                 for (Position position : battlefield.keySet()) {
                     if (battlefield.get(position) == defender) {
