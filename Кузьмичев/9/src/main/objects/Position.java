@@ -2,8 +2,9 @@ package main.objects;
 
 import annotations.SaveIgnore;
 import annotations.SaveName;
+
 import main.objects.position.effects.Effect;
-import main.objects.position.positiontypes.PositionType;
+import main.objects.position.types.PositionType;
 
 import java.util.HashSet;
 import java.util.Objects;

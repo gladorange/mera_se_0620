@@ -1,4 +1,4 @@
-package main.objects.position.positiontypes;
+package main.objects.position.types;
 
 import main.transactions.WeaponTransaction;
 

@@ -1,9 +1,12 @@
-package main.objects.characters;
+package main.objects;
 
 import annotations.SaveIgnore;
 import annotations.SaveName;
-import main.objects.Position;
+
+import main.actions.weapons.Weapon;
+
 import main.objects.characters.stuff.Stuff;
+
 import main.transactions.WeaponTransaction;
 import main.transactions.Transaction;
 
@@ -18,6 +21,8 @@ public abstract class Character {
     public static Integer DEFAULT_MIN_HP = 0;
     @SaveIgnore
     public static Stuff DEFAULT_STUFF = null;
+    @SaveIgnore
+    public static ArrayList<Weapon> DEFAULT_WEAPONS = null;
 
     @SaveIgnore
     private static HashSet<Integer> idsPool = null;
@@ -32,14 +37,16 @@ public abstract class Character {
     private Integer hitPoints;
     @SaveName("Power")
     private Integer power;
+    @SaveName("Weapon")
+    private ArrayList<Weapon> weapons;
     @SaveName("Stuff")
     private Stuff stuff;
 
-    Character(String name, Integer maxHitPoint, Integer power) {
-        this(name, maxHitPoint, power, DEFAULT_STUFF);
+    protected Character(String name, Integer maxHitPoint, Integer power) {
+        this(name, maxHitPoint, power, DEFAULT_WEAPONS, DEFAULT_STUFF);
     }
 
-    Character(String name, Integer maxHitPoint, Integer power, Stuff stuff) {
+    protected Character(String name, Integer maxHitPoint, Integer power, ArrayList<Weapon> weapons, Stuff stuff) {
         if (name == null) {
             throw new IllegalStateException("Character name is null pointer");
         }
@@ -72,8 +79,8 @@ public abstract class Character {
         this.hitPoints = maxHitPoint;
         this.maxHitPoint = maxHitPoint;
         this.power = power;
+        this.weapons = weapons;
         this.stuff = stuff;
-
     }
 
     public Integer getId() {
@@ -108,6 +115,10 @@ public abstract class Character {
 
     public Integer getPower() {
         return power;
+    }
+
+    public ArrayList<Weapon> getWeapons() {
+        return weapons;
     }
 
     public Stuff getStuff() {

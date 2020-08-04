@@ -2,8 +2,10 @@ package main.actions.weapons;
 
 import main.actions.Action;
 import main.actions.ActionDescriber;
+
 import main.objects.Position;
-import main.objects.characters.Character;
+import main.objects.Character;
+
 import main.transactions.Transaction;
 
 import java.util.ArrayList;

@@ -1,9 +1,11 @@
-package main.actions.weapons.longrangestrikes;
+package main.actions.weapons.material;
 
 import main.actions.ActionDescriber;
 
-public enum LongRangeStrikesList implements ActionDescriber {
-    BOWSHOT("BowShot","");
+public enum  MaterialWeaponList implements ActionDescriber {
+    BOWSHOT("BowShot",""),
+    MONSTERSTRIKE("MonsterStrike", ""),
+    KNIGHTSTRIKE("KnightStrike", "");
 
     private String name;
     private String description;
@@ -18,7 +20,7 @@ public enum LongRangeStrikesList implements ActionDescriber {
         return description;
     }
 
-    LongRangeStrikesList(String name, String description) {
+    MaterialWeaponList(String name, String description) {
         this.name = name;
         this.description = description;
     }

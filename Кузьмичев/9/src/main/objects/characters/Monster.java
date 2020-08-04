@@ -1,60 +1,35 @@
 package main.objects.characters;
 
 import annotations.SaveIgnore;
-import main.actions.weapons.closestrikes.MonsterStrike;
-import main.objects.Position;
+
+import main.objects.Character;
 import main.objects.characters.stuff.Stuff;
-import main.transactions.*;
+
+import main.transactions.ChangeHPTransaction;
+import main.transactions.ReactionTransaction;
+import main.transactions.InfoTransaction;
+import main.transactions.WeaponTransaction;
+import main.transactions.Transaction;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Monster extends Character {
+public abstract class Monster extends Character {
     @SaveIgnore
-    private static Integer MIN_POWER = 10;
+    protected static Integer MIN_POWER = 10;
     @SaveIgnore
-    private static Integer MAX_POWER = 20;
+    protected static Integer MAX_POWER = 20;
 
-    public Monster(String name, Integer maxHitPoint) {
+    protected Monster(String name, Integer maxHitPoint) {
         this(name, maxHitPoint, ThreadLocalRandom.current().nextInt(MIN_POWER, MAX_POWER), null);
     }
 
-    public Monster(String name, Integer maxHitPoint, Integer power) {
+    protected Monster(String name, Integer maxHitPoint, Integer power) {
         this(name, maxHitPoint, power, null);
     }
 
-    public Monster(String name, Integer maxHitPoint, Integer power, Stuff stuff) {
-        super(name, maxHitPoint, ThreadLocalRandom.current().nextInt(MIN_POWER, MAX_POWER), stuff);
-    }
-
-    @Override
-    public ArrayList<Transaction> act(Map<Position, Character> battlefield) {
-        Position enemyPosition = null;
-
-        while (enemyPosition == null) {
-            Integer enemyPositionID = ThreadLocalRandom.current().nextInt(battlefield.keySet().size());
-
-            for (Position position : battlefield.keySet()) {
-                if (enemyPositionID.equals(0) && battlefield.get(position) != this) {
-                    enemyPosition = position;
-                }
-                enemyPositionID--;
-            }
-        }
-
-        Map<Position, Character> enemyAndMe = new HashMap<>();
-        enemyAndMe.put(enemyPosition, battlefield.get(enemyPosition));
-
-        for (Position position : battlefield.keySet()) {
-            if (battlefield.get(position) == this) {
-                enemyAndMe.put(position, this);
-                break;
-            }
-        }
-
-        return (new MonsterStrike().attack(enemyAndMe, this));
+    protected Monster(String name, Integer maxHitPoint, Integer power, Stuff stuff) {
+        super(name, maxHitPoint, ThreadLocalRandom.current().nextInt(MIN_POWER, MAX_POWER), null, stuff);
     }
 
     @Override

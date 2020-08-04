@@ -1,8 +1,14 @@
-package main.actions.weapons.longrangestrikes;
+package main.actions.weapons.material;
 
 import main.actions.ActionDescriber;
+
+import main.actions.weapons.Weapon;
+import main.actions.weapons.properties.ColdProperty;
+import main.actions.weapons.properties.LongRangeProperty;
+
 import main.objects.Position;
-import main.objects.characters.Character;
+import main.objects.Character;
+
 import main.transactions.ChangeHPTransaction;
 import main.transactions.InfoTransaction;
 import main.transactions.Transaction;
@@ -10,9 +16,9 @@ import main.transactions.Transaction;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class BowShot extends LongRangeStrike {
+public class BowShot extends Weapon implements LongRangeProperty, ColdProperty {
     public ActionDescriber getDescriber() {
-        return LongRangeStrikesList.BOWSHOT;
+        return MaterialWeaponList.BOWSHOT;
     }
 
     @Override
@@ -38,9 +44,10 @@ public class BowShot extends LongRangeStrike {
                     Math.abs(position.getPosition() - archerPosition.getPosition()) > 0) {
                 Character target = battlefield.get(position);
 
-                transactions.add(new ChangeHPTransaction(attacker, target, -attacker.getPower()));
-                transactions.add(new InfoTransaction(String.format("Archer \"%s\" is attacking \"%s\" on %d hp.",
-                        attacker.getName(), target.getName(), attacker.getPower())));
+                transactions.add(new ChangeHPTransaction(attacker, target, this.getClass(), -attacker.getPower()));
+                String message = String.format("Archer \"%s\" is attacking \"%s\" on %d hp.",
+                        attacker.getName(), target.getName(), attacker.getPower());
+                transactions.add(new InfoTransaction(message));
                 break;
             }
         }
