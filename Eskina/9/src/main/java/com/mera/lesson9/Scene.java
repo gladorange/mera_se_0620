@@ -86,24 +86,14 @@ public class Scene {
         state.startBattle();
     }
 
-    /*@Override
-    public String toString() {
-        return "Scene{" +
-                "characters=" + Arrays.toString(characters) +
-                ", numOfAliveCharacters=" + numOfAliveCharacters +
-                ", state=" + state +
-                ", record=" + record +
-                '}';
-    }*/
-
     //calls after action is performed. If target isn't alive, decrement counter of alive characters
     //and print the state of target.
     public void checkCharacterAfterAttack(GameCharacter character) {
         if (character.checkIsAlive()) {
-            System.out.println("Character " + character.getName() + "is alive. Health = " + character.getHealth());;
+            System.out.println("Character " + character.getName() + "is alive. Health = " + character.getHealth());
         } else {
             --numOfAliveCharacters;
-            System.out.println("Character " + character.getName() + "is killed!!! Health = " + character.getHealth());;
+            System.out.println("Character " + character.getName() + "is killed!!! Health = " + character.getHealth());
             System.out.println("Alive: " + numOfAliveCharacters);
         }
     }

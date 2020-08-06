@@ -56,7 +56,7 @@ public class RandomSceneState implements State {
     //to save them for the future replay to be serialized
     public void recordScene() {
         GameReplay record = scene.getRecord();
-        System.out.println("RecordScene \n" +scene);
+        System.out.println("RecordScene \n");
         record.copyScene(scene);
     }
 
