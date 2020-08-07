@@ -13,8 +13,14 @@ public class AppTest
      * Rigorous Test :-)
      */
     @Test
-    public void shouldAnswerWithTrue()
+    public void testArithmetic()
     {
-        assertTrue(2 + 2 == 4);
+        assertTrue("Арифметика не работает",App.sum(2,2).intValue() == 4);
+    }
+
+    @Test
+    public void testArithmeticOverflow()
+    {
+        assertTrue("Арифметика не работает",App.sum(Integer.MAX_VALUE,42).signum() > 0);
     }
 }
