@@ -2,7 +2,6 @@ package game;
 
 import game.spells.MagicBestow;
 import game.spells.Spell;
-import game.Character;
 
 import java.util.Random;
 
@@ -19,12 +18,10 @@ public class Magician extends Character {
         spellList = new Spell[numSpells];
         for (int i = 0; i < spellList.length; i++) {
             spellList[i] = MagicBestow.bestowRandomSpell();
-            //System.out.println("Mag"+name+", spel["+i+"]..is "+spellList[i].getClass().getName());
             if (i > 0) {
                 boolean isTheSame;
                 do {
                     isTheSame = false;
-                    //System.out.println("Mag"+name+", spel["+i+"]..was "+spellList[i].getClass().getName());
                     for (int j = 0; j < i - 1; j++) {
                         if (spellList[j].getClass().equals(spellList[i].getClass())) {
                             isTheSame = true;
@@ -33,21 +30,25 @@ public class Magician extends Character {
                     }
                     if (isTheSame) {
                         spellList[i] = MagicBestow.bestowRandomSpell();
-                        //System.out.println("..changed by "+spellList[i].getClass().getName());
                     }
                 } while (isTheSame);
             }
         }
     }
 
-    public Spell chooseSomeSpell() {
-        return spellList[random.nextInt(spellList.length)];
+    public Spell chooseSomeSpell(Scene scene) {
+        Integer randomSpellNumber = scene.chooseSpellNumber(spellList.length);
+        return (randomSpellNumber == null) ? null : spellList[randomSpellNumber];
     }
 
     @Override
     public void doAttackSomeone(Scene scene) {
-        Spell spell = chooseSomeSpell();
-        spell.cast(scene, this);
+        Spell spell = chooseSomeSpell(scene);
+        if (spell == null) {
+            System.out.println(" - " + this.getTypeName() + " " + this.getName() + ": не выбрано заклинание - пропуск хода.");
+        } else {
+            spell.cast(scene, this);
+        }
     }
 
     @Override
@@ -67,5 +68,12 @@ public class Magician extends Character {
     @Override
     public String getTypeName() {
         return "Маг";
+    }
+
+    @Override
+    public Magician clone() {
+        Magician newMagician = new Magician(this.name, this.position);
+        newMagician.spellList = this.spellList; // just reference because nothing changed inside.
+        return newMagician;
     }
 }
