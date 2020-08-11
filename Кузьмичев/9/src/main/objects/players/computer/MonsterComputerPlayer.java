@@ -8,7 +8,7 @@ package main.objects.players.computer;
 
 import main.actions.weapons.material.MonsterStrike;
 
-import main.objects.characters.AbstractCharacter;
+import main.objects.characters.Character;
 import main.objects.Position;
 import main.objects.characters.AbstractMonster;
 import main.objects.characters.stuff.Stuff;
@@ -22,6 +22,13 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MonsterComputerPlayer extends AbstractMonster implements ComputerPlayer {
+
+    /**
+     * Empty constructor for game save implementation
+     */
+    public MonsterComputerPlayer() {
+    }
+
     public MonsterComputerPlayer(String name, Integer maxHitPoint) {
         super(name, maxHitPoint);
     }
@@ -35,7 +42,7 @@ public class MonsterComputerPlayer extends AbstractMonster implements ComputerPl
     }
 
     @Override
-    public ArrayList<Transaction> act(Map<Position, AbstractCharacter> battlefield) {
+    public ArrayList<Transaction> act(Map<Position, Character> battlefield) {
         Position enemyPosition = null;
 
         while (enemyPosition == null) {
@@ -49,7 +56,7 @@ public class MonsterComputerPlayer extends AbstractMonster implements ComputerPl
             }
         }
 
-        Map<Position, AbstractCharacter> enemyAndMe = new HashMap<>();
+        Map<Position, Character> enemyAndMe = new HashMap<>();
         enemyAndMe.put(enemyPosition, battlefield.get(enemyPosition));
 
         for (Position position : battlefield.keySet()) {

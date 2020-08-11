@@ -1,6 +1,6 @@
 /*****************************************************************************
  * File: ExileMonsters.java
- * Purpose: For creation scene transactions depending on weapon implementation
+ * Purpose: For creation scene transactions depending on weapon specification
  * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
  *****************************************************************************/
 
@@ -12,7 +12,7 @@ import main.actions.weapons.Weapon;
 import main.actions.weapons.properties.SpellProperty;
 
 import main.objects.Position;
-import main.objects.characters.AbstractCharacter;
+import main.objects.characters.Character;
 import main.objects.characters.AbstractMonster;
 
 import main.transactions.ChangeHPTransaction;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Weapon implementation
+ * Weapon specification
  *
  * Name: ExileMonsters
  * Target: Monsters
@@ -33,11 +33,11 @@ import java.util.Map;
 
 public class ExileMonsters extends Weapon implements SpellProperty {
     public ActionDescriber getDescriber() {
-        return SpellsList.CHAINLIGHTNING;
+        return SpellsList.EXILEMONSTER;
     }
 
     @Override
-    public ArrayList<Transaction> attack(Map<Position, AbstractCharacter> battlefield, AbstractCharacter attacker) {
+    public ArrayList<Transaction> attack(Map<Position, Character> battlefield, Character attacker) {
         ArrayList<Transaction> transactions = new ArrayList<>();
 
         if (getBlocked()) {
@@ -47,7 +47,7 @@ public class ExileMonsters extends Weapon implements SpellProperty {
         }
 
         for (Position position : battlefield.keySet()) {
-            AbstractCharacter target = battlefield.get(position);
+            Character target = battlefield.get(position);
             if (target instanceof AbstractMonster) {
                 transactions.add(new ChangeHPTransaction(attacker, target, this.getClass(), -attacker.getPower()));
                 String message = String.format("Magician \"%s\" is attacking \"%s\" on %d hp.",

@@ -1,6 +1,6 @@
 /*****************************************************************************
  * File: BowShot.java
- * Purpose: For creation scene transactions depending on weapon implementation
+ * Purpose: For creation scene transactions depending on weapon specification
  * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
  *****************************************************************************/
 
@@ -14,7 +14,7 @@ import main.actions.weapons.properties.LongRangeProperty;
 
 import main.actions.weapons.properties.MaterialProperty;
 import main.objects.Position;
-import main.objects.characters.AbstractCharacter;
+import main.objects.characters.Character;
 
 import main.transactions.ChangeHPTransaction;
 import main.transactions.InfoTransaction;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Weapon implementation
+ * Weapon specification
  *
  * Name: BowShot
  * Target: All characters excluding attacker
@@ -34,11 +34,11 @@ import java.util.Map;
 
 public class BowShot extends Weapon implements MaterialProperty, LongRangeProperty, ColdProperty {
     public ActionDescriber getDescriber() {
-        return MaterialWeaponList.BOWSHOT;
+        return MaterialWeaponsList.BOWSHOT;
     }
 
     @Override
-    public ArrayList<Transaction> attack(Map<Position, AbstractCharacter> battlefield, AbstractCharacter attacker) {
+    public ArrayList<Transaction> attack(Map<Position, Character> battlefield, Character attacker) {
         ArrayList<Transaction> transactions = new ArrayList<>();
 
         Position archerPosition = null;
@@ -58,7 +58,7 @@ public class BowShot extends Weapon implements MaterialProperty, LongRangeProper
         for (Position position : battlefield.keySet()) {
             if (Math.abs(position.getPosition() - archerPosition.getPosition()) <= 10 &&
                     Math.abs(position.getPosition() - archerPosition.getPosition()) > 0) {
-                AbstractCharacter target = battlefield.get(position);
+                Character target = battlefield.get(position);
 
                 transactions.add(new ChangeHPTransaction(attacker, target, this.getClass(), -attacker.getPower()));
                 String message = String.format("Archer \"%s\" is attacking \"%s\" on %d hp.",

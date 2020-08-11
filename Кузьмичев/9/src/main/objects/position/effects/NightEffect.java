@@ -10,7 +10,7 @@ import main.transactions.WeaponTransaction;
 
 public class NightEffect extends Effect {
     @Override
-    public WeaponTransaction getEffectedTransactions(WeaponTransaction transaction) {
+    public WeaponTransaction modifyTransactions(WeaponTransaction transaction) {
         return transaction;
     }
 }

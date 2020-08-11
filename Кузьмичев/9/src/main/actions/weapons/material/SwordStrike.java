@@ -1,6 +1,6 @@
 /*****************************************************************************
  * File: SwordStrike.java
- * Purpose: For creation scene transactions depending on weapon implementation
+ * Purpose: For creation scene transactions depending on weapon specification
  * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
  *****************************************************************************/
 
@@ -12,7 +12,7 @@ import main.actions.weapons.Weapon;
 import main.actions.weapons.properties.CloseProperty;
 import main.actions.weapons.properties.ColdProperty;
 import main.actions.weapons.properties.MaterialProperty;
-import main.objects.characters.AbstractCharacter;
+import main.objects.characters.Character;
 import main.objects.Position;
 
 import main.transactions.ChangeHPTransaction;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Weapon implementation
+ * Weapon specification
  *
  * Name: SwordStrike
  * Target: All characters excluding attacker
@@ -34,15 +34,15 @@ import java.util.Map;
 public class SwordStrike extends Weapon implements MaterialProperty, CloseProperty, ColdProperty {
     @Override
     public ActionDescriber getDescriber() {
-        return MaterialWeaponList.KNIGHTSTRIKE;
+        return MaterialWeaponsList.KNIGHTSTRIKE;
     }
 
     @Override
-    public ArrayList<Transaction> attack(Map<Position, AbstractCharacter> battlefield, AbstractCharacter attacker) {
+    public ArrayList<Transaction> attack(Map<Position, Character> battlefield, Character attacker) {
         ArrayList<Transaction> transactions = new ArrayList<>();
 
         for (Position position : battlefield.keySet()) {
-            AbstractCharacter target = battlefield.get(position);
+            Character target = battlefield.get(position);
 
             if (target == attacker) {
                 continue;

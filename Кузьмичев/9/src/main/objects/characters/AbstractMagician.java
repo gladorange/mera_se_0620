@@ -6,11 +6,9 @@
 
 package main.objects.characters;
 
-import annotations.SaveIgnore;
-
 import main.actions.weapons.Weapon;
 
-import main.objects.characters.stuff.Mantle;
+import main.objects.characters.stuff.MantleStuff;
 import main.objects.characters.stuff.Stuff;
 
 import main.transactions.ChangeHPTransaction;
@@ -22,13 +20,17 @@ import main.transactions.Transaction;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class AbstractMagician extends AbstractCharacter {
-    @SaveIgnore
+public abstract class AbstractMagician extends Character {
     protected static Integer MIN_POWER = 10;
-    @SaveIgnore
     protected static Integer MAX_POWER = 30;
-    @SaveIgnore
+
     protected static Integer LOW_HEALTH = 20;
+
+    /**
+     * Empty constructor for game save implementation
+     */
+    public AbstractMagician() {
+    }
 
     protected AbstractMagician(String name, Integer maxHitPoint, ArrayList<Weapon> weapons) {
         this(name, maxHitPoint, ThreadLocalRandom.current().nextInt(MIN_POWER, MAX_POWER), weapons, null);
@@ -47,7 +49,7 @@ public abstract class AbstractMagician extends AbstractCharacter {
         ArrayList<Transaction> reaction = new ArrayList<>();
 
         if (transaction instanceof ChangeHPTransaction) {
-            AbstractCharacter attacker = transaction.getActionCreator();
+            Character attacker = transaction.getActionCreator();
             Integer hitPoints = ((ChangeHPTransaction) transaction).getHitPoints();
 
             if (attacker == null) {
@@ -62,8 +64,8 @@ public abstract class AbstractMagician extends AbstractCharacter {
                 return reaction;
             }
 
-            if (getStuff() instanceof Mantle) {
-                Integer correctedHitPoints = ((Mantle) getStuff()).protect(hitPoints);
+            if (getStuff() instanceof MantleStuff) {
+                Integer correctedHitPoints = ((MantleStuff) getStuff()).protect(hitPoints);
                 setHitPoints(getHitPoints() + correctedHitPoints);
 
                 reaction.add(new InfoTransaction(String.format("Magician \"%s\" protects self by shield.", getName())));

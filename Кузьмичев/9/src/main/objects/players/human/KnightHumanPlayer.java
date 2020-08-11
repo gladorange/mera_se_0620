@@ -8,7 +8,7 @@ package main.objects.players.human;
 
 import main.actions.weapons.Weapon;
 
-import main.objects.characters.AbstractCharacter;
+import main.objects.characters.Character;
 import main.objects.Position;
 import main.objects.characters.AbstractKnight;
 import main.objects.characters.stuff.Stuff;
@@ -19,6 +19,13 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class KnightHumanPlayer extends AbstractKnight {
+
+    /**
+     * Empty constructor for game save implementation
+     */
+    public KnightHumanPlayer() {
+    }
+
     public KnightHumanPlayer(String name, Integer maxHitPoint, ArrayList<Weapon> weapons) {
         super(name, maxHitPoint, weapons);
     }
@@ -32,7 +39,7 @@ public class KnightHumanPlayer extends AbstractKnight {
     }
 
     @Override
-    public ArrayList<Transaction> act(Map<Position, AbstractCharacter> battlefield) {
+    public ArrayList<Transaction> act(Map<Position, Character> battlefield) {
         return null;
     }
 }

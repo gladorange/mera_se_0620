@@ -1,5 +1,5 @@
 /****************************************************************
- * File: MaterialWeaponList.java
+ * File: MaterialWeaponsList.java
  * Purpose: Enum for name and description of material weapons
  * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
  ****************************************************************/
@@ -8,7 +8,7 @@ package main.actions.weapons.material;
 
 import main.actions.ActionDescriber;
 
-public enum  MaterialWeaponList implements ActionDescriber {
+public enum MaterialWeaponsList implements ActionDescriber {
     BOWSHOT("BowShot",""),
     MONSTERSTRIKE("MonsterStrike", ""),
     KNIGHTSTRIKE("SwordStrike", "");
@@ -26,7 +26,7 @@ public enum  MaterialWeaponList implements ActionDescriber {
         return description;
     }
 
-    MaterialWeaponList(String name, String description) {
+    MaterialWeaponsList(String name, String description) {
         this.name = name;
         this.description = description;
     }

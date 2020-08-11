@@ -6,25 +6,25 @@
 
 package main.transactions;
 
-import main.objects.characters.AbstractCharacter;
+import main.objects.characters.Character;
 
-public abstract class WeaponTransaction extends ChangeCharacterTransaction {
-    private AbstractCharacter transactionCreator;
-    private AbstractCharacter transactionGetter;
+public abstract class WeaponTransaction extends ChangeTransaction {
+    private Character transactionCreator;
+    private Character transactionGetter;
 
     private Class weaponClass;
 
-    public WeaponTransaction(AbstractCharacter transactionCreator, AbstractCharacter transactionGetter, Class weaponClass) {
+    public WeaponTransaction(Character transactionCreator, Character transactionGetter, Class weaponClass) {
         this.transactionCreator = transactionCreator;
         this.transactionGetter = transactionGetter;
         this.weaponClass = weaponClass;
     }
 
-    public AbstractCharacter getActionCreator() {
+    public Character getActionCreator() {
         return transactionCreator;
     }
 
-    public AbstractCharacter getActionGetter() {
+    public Character getActionGetter() {
         return transactionGetter;
     }
 

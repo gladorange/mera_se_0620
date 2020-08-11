@@ -1,6 +1,6 @@
 /*****************************************************************************
  * File: MonsterStrike.java
- * Purpose: For creation scene transactions depending on weapon implementation
+ * Purpose: For creation scene transactions depending on weapon specification
  * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
  *****************************************************************************/
 
@@ -14,7 +14,7 @@ import main.actions.weapons.properties.ColdProperty;
 
 import main.actions.weapons.properties.MaterialProperty;
 import main.objects.Position;
-import main.objects.characters.AbstractCharacter;
+import main.objects.characters.Character;
 
 import main.transactions.ChangeHPTransaction;
 import main.transactions.InfoTransaction;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Weapon implementation
+ * Weapon specification
  *
  * Name: MonsterStrike
  * Target: All characters excluding attacker
@@ -34,15 +34,15 @@ import java.util.Map;
 
 public class MonsterStrike extends Weapon implements MaterialProperty, CloseProperty, ColdProperty {
     public ActionDescriber getDescriber() {
-        return MaterialWeaponList.MONSTERSTRIKE;
+        return MaterialWeaponsList.MONSTERSTRIKE;
     }
 
     @Override
-    public ArrayList<Transaction> attack(Map<Position, AbstractCharacter> battlefield, AbstractCharacter attacker) {
+    public ArrayList<Transaction> attack(Map<Position, Character> battlefield, Character attacker) {
         ArrayList<Transaction> transactions = new ArrayList<>();
 
         for (Position position : battlefield.keySet()) {
-            AbstractCharacter target = battlefield.get(position);
+            Character target = battlefield.get(position);
 
             if (target == attacker) {
                 continue;

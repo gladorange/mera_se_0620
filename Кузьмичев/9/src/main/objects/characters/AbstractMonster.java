@@ -6,8 +6,6 @@
 
 package main.objects.characters;
 
-import annotations.SaveIgnore;
-
 import main.objects.characters.stuff.Stuff;
 
 import main.transactions.ChangeHPTransaction;
@@ -19,11 +17,15 @@ import main.transactions.Transaction;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class AbstractMonster extends AbstractCharacter {
-    @SaveIgnore
+public abstract class AbstractMonster extends Character {
     protected static Integer MIN_POWER = 10;
-    @SaveIgnore
     protected static Integer MAX_POWER = 20;
+
+    /**
+     * Empty constructor for game save implementation
+     */
+    public AbstractMonster() {
+    }
 
     protected AbstractMonster(String name, Integer maxHitPoint) {
         this(name, maxHitPoint, ThreadLocalRandom.current().nextInt(MIN_POWER, MAX_POWER), null);
@@ -42,7 +44,7 @@ public abstract class AbstractMonster extends AbstractCharacter {
         ArrayList<Transaction> reaction = new ArrayList<>();
 
         if (transaction instanceof ChangeHPTransaction) {
-            AbstractCharacter attacker = transaction.getActionCreator();
+            Character attacker = transaction.getActionCreator();
             Integer hitPoints = ((ChangeHPTransaction) transaction).getHitPoints();
 
             if (attacker == null) {

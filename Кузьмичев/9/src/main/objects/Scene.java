@@ -6,32 +6,55 @@
 
 package main.objects;
 
-import main.objects.characters.AbstractCharacter;
-import main.transactions.ChangeCharacterTransaction;
+import main.objects.characters.Character;
+
+import main.transactions.Transaction;
 import main.transactions.ReactionTransaction;
 import main.transactions.InfoTransaction;
 import main.transactions.WeaponTransaction;
-import main.transactions.Transaction;
+import main.transactions.ChangeTransaction;
 
+import java.io.IOException;
 import java.util.*;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 public class Scene {
-    private static AbstractCharacter NO_CHARACTER = null;
+    private static Character NO_CHARACTER = null;
 
-    private String name;
+    private String sceneName;
     private Boolean isEndGame = false;
+    private Boolean isReplayGame = false;
 
-    private Map<Position, AbstractCharacter> battlefield;
+    private Map<Position, Character> battlefield;
     private Integer currentPositionNumber = 0;
     private Integer numberOfMissedMove = 0;
 
-    public Scene(String name) {
-        this.name = name;
+    private SaveUtils writeSaveUtils = null;
+    private Queue<Transaction> transactionsHistory = new ArrayDeque<>();
+
+    public Scene(ZipFile saveFile)
+            throws IllegalAccessException, InstantiationException, IOException {
+
+        SaveUtils loadSaveUtils = new SaveUtils(saveFile);
+
+        battlefield = loadSaveUtils.getRestoredMap();
+        transactionsHistory.addAll(loadSaveUtils.getRestoredTransactions());
+
+        isReplayGame = true;
+    }
+
+    public Scene(String sceneName) {
+        this.sceneName = sceneName;
         battlefield = new HashMap<>();
     }
 
-    public Integer addCharacter(AbstractCharacter newCharacter) {
-        for (Position position: battlefield.keySet()) {
+    public String getSceneName() {
+        return sceneName;
+    }
+
+    public Integer addCharacter(Character newCharacter) {
+        for (Position position : battlefield.keySet()) {
             if (battlefield.get(position) == NO_CHARACTER) {
                 battlefield.replace(position, newCharacter);
                 return position.getPosition();
@@ -43,37 +66,42 @@ public class Scene {
         return newPosition.getPosition();
     }
 
-    public Boolean addCharacter(AbstractCharacter character, Integer newPositionNumber) {
+    public Boolean addCharacter(Character character, Integer newPositionNumber) {
         if (newPositionNumber <= 0) {
             return false;
         }
 
         Position newPosition = null;
 
-        for (Position position: battlefield.keySet()) {
+        for (Position position : battlefield.keySet()) {
             if (position.getPosition().equals(newPositionNumber)) {
                 newPosition = position;
             }
         }
 
-        if ((newPosition != null) && (battlefield.get(newPosition) == NO_CHARACTER)) {
-                battlefield.replace(newPosition, character);
-                return true;
+        if (newPosition == null) {
+            return false;
         }
-        return false;
+
+        if (battlefield.get(newPosition) != NO_CHARACTER) {
+            return false;
+        }
+
+        battlefield.replace(newPosition, character);
+        return true;
     }
 
-    public  Boolean getUsedPosition(Integer positionNumber) {
-        for(Position position: battlefield.keySet()) {
-            if(position.getPosition().equals(positionNumber)) {
+    public Boolean checkUsedPosition(Integer positionNumber) {
+        for (Position position : battlefield.keySet()) {
+            if (position.getPosition().equals(positionNumber)) {
                 return true;
             }
         }
         return false;
     }
 
-    private Map<Position, AbstractCharacter> getAliveCharacters() {
-        Map<Position, AbstractCharacter> aliveCharacters = new HashMap<>();
+    private Map<Position, Character> getAliveCharacters() {
+        Map<Position, Character> aliveCharacters = new HashMap<>();
 
         for (Position position : battlefield.keySet()) {
             if (battlefield.get(position) != NO_CHARACTER) {
@@ -91,99 +119,14 @@ public class Scene {
         return isEndGame;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    private void verifyBattlefield() {
-        for (Position position : battlefield.keySet()) {
-            if ((battlefield.get(position) != NO_CHARACTER) &&
-                    (battlefield.get(position).getHitPoints().equals(0))) {
-
-                System.out.printf("Server \"%s\" | Player \"%s\" was killed.\n",
-                        name,
-                        battlefield.get(position).getName());
-                battlefield.replace(position, NO_CHARACTER);
-            }
-        }
-    }
-
-    private Boolean checkNoPlayers() {
-        if (battlefield.size() == 0 || getAliveCharacters().keySet().size() == 0) {
-            System.out.printf("Server \"%s\" | No players.\n", name);
-            return true;
-        }
-        return false;
-    }
-
-    private AbstractCharacter getCurrentCharacter() {
-        while (true) {
-            currentPositionNumber = (currentPositionNumber + 1) % battlefield.keySet().size();
-
-            for (Position position: battlefield.keySet()) {
-                if (position.getPosition().equals(currentPositionNumber) &&
-                        (battlefield.get(position) != NO_CHARACTER)) {
-                    return battlefield.get(position);
-                }
-            }
-        }
-    }
-
-    private Boolean verifyEndGame() {
-        Map<Position, AbstractCharacter> aliveCharacters = getAliveCharacters();
-
-        if (aliveCharacters.keySet().size() == 1) {
-            isEndGame = true;
-
-            ArrayList<AbstractCharacter> winner = new ArrayList<>(aliveCharacters.values());
-
-            System.out.printf("Server \"%s\" | Player \"%s\" win!\n",
-                    name,
-                    winner.get(0).getName());
-            System.out.printf("Server \"%s\" | Game Over!\n", name);
-
-            return true;
-        }
-        return false;
-    }
-
-    private Boolean verifyStandoff() {
-        if (numberOfMissedMove.equals(getAliveCharacters().size()) && numberOfMissedMove > 1) {
-            isEndGame = true;
-
-            System.out.printf("Server \"%s\" | Standoff!\n", name);
-
-            for (Position position : getAliveCharacters().keySet()) {
-                System.out.printf("Server \"%s\" | Remaining player - \"%s\"\n",
-                        name,
-                        battlefield.get(position).getName());
-            }
-
-            System.out.printf("Server \"%s\" | Game Over!\n", name);
-            return true;
-        }
-        return false;
-    }
-
-    private Boolean checkExistChangeCharacterTransaction(Collection<Transaction> actions, AbstractCharacter currentCharacter) {
-        for (Transaction transaction: actions) {
-            if (transaction instanceof ChangeCharacterTransaction) {
-                return true;
-            }
-        }
-
-        System.out.printf("Server \"%s\" | Player \"%s\" missed a move.\n",
-                name,
-                currentCharacter.getName());
-
-        numberOfMissedMove++;
-        verifyStandoff();
-        return false;
+    public void writeGameContainer(ZipOutputStream gameContainer) throws IOException {
+        writeSaveUtils.putTransactionHistory(transactionsHistory);
+        writeSaveUtils.writeGameContainer(gameContainer);
     }
 
     public void playMove() {
         if (getEndGame()) {
-            System.out.printf("Server \"%s\" | Game Over!\n", name);
+            System.out.printf("Server \"%s\" | Game Over!\n", sceneName);
             return;
         }
 
@@ -191,36 +134,93 @@ public class Scene {
             return;
         }
 
-        AbstractCharacter currentCharacter = getCurrentCharacter();
+        if (!isReplayGame && writeSaveUtils == null) {
+            writeSaveUtils = new SaveUtils(battlefield);
+        }
 
-        Queue<Transaction> actionsQueue = new ArrayDeque<>(currentCharacter.act(getAliveCharacters()));
+        if (!isReplayGame) {
+            Character currentCharacter = getCurrentCharacter();
 
-        if (!checkExistChangeCharacterTransaction(actionsQueue, currentCharacter)) {
+            ArrayList<Transaction> transactions = new ArrayList<>(currentCharacter.act(getAliveCharacters()));
+            transactionsHistory.addAll(transactions);
+            Queue<Transaction> actionsQueue = new ArrayDeque<>(transactions);
+
+            if (!checkExistChangeTransaction(actionsQueue, currentCharacter)) {
+                verifyStandoff();
+                return;
+            }
+
+            while (!actionsQueue.isEmpty()) {
+                numberOfMissedMove = 0;
+
+                Transaction transaction = actionsQueue.poll();
+
+                if (transaction instanceof WeaponTransaction) {
+                    Character defender = ((WeaponTransaction) transaction).getActionGetter();
+
+                    for (Position position : battlefield.keySet()) {
+                        if (battlefield.get(position) == defender) {
+                            if (position.getPositionType() != null) {
+                                transaction = position.getPositionType().modifyTransactions((WeaponTransaction) transaction);
+                            }
+                            if (position.getEffect() != null) {
+                                transaction = position.getEffect().modifyTransactions((WeaponTransaction) transaction);
+                            }
+                            break;
+                        }
+                    }
+
+                    ArrayList<Transaction> reaction = defender.react((WeaponTransaction) transaction);
+                    transactionsHistory.addAll(reaction);
+                    actionsQueue.addAll(reaction);
+                    continue;
+                }
+
+                if (transaction instanceof InfoTransaction) {
+                    if (transaction instanceof ReactionTransaction) {
+                        if (!((ReactionTransaction) transaction).getExecuted()) {
+                            System.out.printf(
+                                    "Server \"%s\" | Error: %s ( %s ).\n",
+                                    sceneName,
+                                    ((ReactionTransaction) transaction).getMessage(),
+                                    ((ReactionTransaction) transaction).getErrorTransaction());
+                            isEndGame = true;
+                            return;
+                        }
+                        continue;
+                    }
+
+                    System.out.printf("Server \"%s\" | %s\n",
+                            sceneName,
+                            ((InfoTransaction) transaction).getMessage());
+                }
+            }
+            verifyCharactersStatus();
+            verifyEndGame();
             return;
         }
 
-        while (!actionsQueue.isEmpty()) {
+        while (!transactionsHistory.isEmpty()) {
             numberOfMissedMove = 0;
 
-            Transaction transaction = actionsQueue.poll();
+            Transaction transaction = transactionsHistory.poll();
 
             if (transaction instanceof WeaponTransaction) {
-                AbstractCharacter defender = ((WeaponTransaction) transaction).getActionGetter();
+                Character defender = ((WeaponTransaction) transaction).getActionGetter();
 
                 for (Position position : battlefield.keySet()) {
                     if (battlefield.get(position) == defender) {
                         if (position.getPositionType() != null) {
-                            transaction = position.getPositionType().getEffectedTransactions((WeaponTransaction) transaction);
+                            transaction = position.getPositionType().modifyTransactions((WeaponTransaction) transaction);
                         }
                         if (position.getEffect() != null) {
-                            transaction = position.getEffect().getEffectedTransactions((WeaponTransaction) transaction);
+                            transaction = position.getEffect().modifyTransactions((WeaponTransaction) transaction);
                         }
                         break;
                     }
                 }
 
-                ArrayList<Transaction> reaction = defender.react((WeaponTransaction) transaction);
-                actionsQueue.addAll(reaction);
+                defender.react((WeaponTransaction) transaction);
                 continue;
             }
 
@@ -229,7 +229,7 @@ public class Scene {
                     if (!((ReactionTransaction) transaction).getExecuted()) {
                         System.out.printf(
                                 "Server \"%s\" | Error: %s ( %s ).\n",
-                                name,
+                                sceneName,
                                 ((ReactionTransaction) transaction).getMessage(),
                                 ((ReactionTransaction) transaction).getErrorTransaction());
                         isEndGame = true;
@@ -239,12 +239,103 @@ public class Scene {
                 }
 
                 System.out.printf("Server \"%s\" | %s\n",
-                        name,
+                        sceneName,
                         ((InfoTransaction) transaction).getMessage());
+            }
+
+            verifyCharactersStatus();
+            if (verifyEndGame()) {
+                return;
+            }
+        }
+    }
+
+    private Boolean checkNoPlayers() {
+        if ((battlefield.size() == 0) || (getAliveCharacters().keySet().size() == 0)) {
+            System.out.printf("Server \"%s\" | No players.\n", sceneName);
+            return true;
+        }
+        return false;
+    }
+
+    private Character getCurrentCharacter() {
+        while (true) {
+            currentPositionNumber = (currentPositionNumber + 1) % battlefield.keySet().size();
+
+            for (Position position : battlefield.keySet()) {
+                if (position.getPosition().equals(currentPositionNumber) &&
+                        (battlefield.get(position) != NO_CHARACTER)) {
+                    return battlefield.get(position);
+                }
+            }
+        }
+    }
+
+    private Boolean checkExistChangeTransaction(Collection<Transaction> transactions,
+                                                Character currentCharacter) {
+        for (Transaction transaction : transactions) {
+            if (transaction instanceof ChangeTransaction) {
+                return true;
             }
         }
 
-        verifyBattlefield();
-        verifyEndGame();
+        if (currentCharacter != null) {
+            System.out.printf("Server \"%s\" | Player \"%s\" missed a move.\n",
+                    sceneName,
+                    currentCharacter.getName());
+        } else {
+            System.out.printf("Server \"%s\" | Player  missed a move.\n", sceneName);
+        }
+
+        numberOfMissedMove++;
+        return false;
+    }
+
+    private void verifyStandoff() {
+        Map<Position, Character> aliveCharacters = getAliveCharacters();
+
+        if (numberOfMissedMove.equals(aliveCharacters.size()) && numberOfMissedMove > 1) {
+            isEndGame = true;
+
+            System.out.printf("Server \"%s\" | Standoff!\n", sceneName);
+
+            for (Position position : aliveCharacters.keySet()) {
+                System.out.printf("Server \"%s\" | Remaining player - \"%s\"\n",
+                        sceneName,
+                        battlefield.get(position).getName());
+            }
+
+            System.out.printf("Server \"%s\" | Game Over!\n", sceneName);
+        }
+    }
+
+    private void verifyCharactersStatus() {
+        for (Position position : battlefield.keySet()) {
+            if ((battlefield.get(position) != NO_CHARACTER) &&
+                    (battlefield.get(position).getHitPoints().equals(0))) {
+
+                System.out.printf("Server \"%s\" | Player \"%s\" was killed.\n",
+                        sceneName,
+                        battlefield.get(position).getName());
+                battlefield.replace(position, NO_CHARACTER);
+            }
+        }
+    }
+
+    private Boolean verifyEndGame() {
+        Map<Position, Character> aliveCharacters = getAliveCharacters();
+
+        if (aliveCharacters.keySet().size() == 1) {
+            isEndGame = true;
+
+            ArrayList<Character> winner = new ArrayList<>(aliveCharacters.values());
+
+            System.out.printf("Server \"%s\" | Player \"%s\" win!\n",
+                    sceneName,
+                    winner.get(0).getName());
+            System.out.printf("Server \"%s\" | Game Over!\n", sceneName);
+            return true;
+        }
+        return false;
     }
 }

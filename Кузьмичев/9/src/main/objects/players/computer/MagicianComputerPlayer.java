@@ -11,7 +11,7 @@ import main.actions.weapons.Weapon;
 import main.actions.weapons.properties.SpellProperty;
 import main.actions.weapons.spells.Healing;
 
-import main.objects.characters.AbstractCharacter;
+import main.objects.characters.Character;
 import main.objects.Position;
 import main.objects.characters.AbstractMagician;
 import main.objects.characters.stuff.Stuff;
@@ -26,6 +26,13 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MagicianComputerPlayer extends AbstractMagician implements ComputerPlayer {
+
+    /**
+     * Empty constructor for game save implementation
+     */
+    public MagicianComputerPlayer() {
+    }
+
     public MagicianComputerPlayer(String name, Integer maxHitPoint, ArrayList<Weapon> weapons) {
         super(name, maxHitPoint, weapons);
     }
@@ -39,7 +46,7 @@ public class MagicianComputerPlayer extends AbstractMagician implements Computer
     }
 
     @Override
-    public ArrayList<Transaction> act(Map<Position, AbstractCharacter> battlefield) {
+    public ArrayList<Transaction> act(Map<Position, Character> battlefield) {
         ArrayList<Transaction> transactions = new ArrayList<>();
 
         if ((getWeapons() == null) | (getWeapons().size() == 0)) {
@@ -59,11 +66,11 @@ public class MagicianComputerPlayer extends AbstractMagician implements Computer
         }
 
         ActionDescriber describer = weapon.getDescriber();
-        String message = String.format("AbstractMagician \"%s\" is trying use weapon \"%s\".", getName(), describer.getName());
+        String message = String.format("Magician \"%s\" is trying use weapon \"%s\".", getName(), describer.getName());
         transactions.add(new InfoTransaction(message));
 
         if (ThreadLocalRandom.current().nextBoolean()) {
-            message = String.format("AbstractMagician \"%s\": \"%s\" used bad.", getName(), describer.getName());
+            message = String.format("Magician \"%s\": \"%s\" used bad.", getName(), describer.getName());
             transactions.add(new InfoTransaction(message));
             return transactions;
         }
@@ -73,7 +80,7 @@ public class MagicianComputerPlayer extends AbstractMagician implements Computer
             return transactions;
         }
 
-        message = String.format("AbstractMagician \"%s\" is casting spell \"%s\".", getName(), describer.getName());
+        message = String.format("Magician \"%s\" is casting spell \"%s\".", getName(), describer.getName());
         transactions.add(new InfoTransaction(message));
 
         if ((weapon instanceof Healing) && (getHitPoints() < LOW_HEALTH)) {

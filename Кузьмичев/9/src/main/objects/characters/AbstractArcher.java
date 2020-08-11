@@ -6,8 +6,6 @@
 
 package main.objects.characters;
 
-import annotations.SaveIgnore;
-
 import main.actions.weapons.Weapon;
 
 import main.objects.characters.stuff.Stuff;
@@ -21,11 +19,15 @@ import main.transactions.ReactionTransaction;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class AbstractArcher extends AbstractCharacter {
-    @SaveIgnore
+public abstract class AbstractArcher extends Character {
     protected static Integer MIN_POWER = 15;
-    @SaveIgnore
     protected static Integer MAX_POWER = 25;
+
+    /**
+     * Empty constructor for game save implementation
+     */
+    public AbstractArcher() {
+    }
 
     protected AbstractArcher(String name, Integer maxHitPoint, ArrayList<Weapon> weapons) {
         this(name, maxHitPoint, ThreadLocalRandom.current().nextInt(MIN_POWER, MAX_POWER), weapons, null);
@@ -44,7 +46,7 @@ public abstract class AbstractArcher extends AbstractCharacter {
         ArrayList<Transaction> reaction = new ArrayList<>();
 
         if (transaction instanceof ChangeHPTransaction) {
-            AbstractCharacter attacker = transaction.getActionCreator();
+            Character attacker = transaction.getActionCreator();
             Integer hitPoints = ((ChangeHPTransaction) transaction).getHitPoints();
 
             if (attacker == null) {

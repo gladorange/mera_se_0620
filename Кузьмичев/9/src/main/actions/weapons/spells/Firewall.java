@@ -1,6 +1,6 @@
 /*****************************************************************************
  * File: Firewall.java
- * Purpose: For creation scene transactions depending on weapon implementation
+ * Purpose: For creation scene transactions depending on weapon specification
  * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
  *****************************************************************************/
 
@@ -13,7 +13,7 @@ import main.actions.weapons.properties.FireProperty;
 import main.actions.weapons.properties.SpellProperty;
 
 import main.objects.Position;
-import main.objects.characters.AbstractCharacter;
+import main.objects.characters.Character;
 
 import main.transactions.ChangeHPTransaction;
 import main.transactions.InfoTransaction;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Weapon implementation
+ * Weapon specification
  *
  * Name: Firewall
  * Target: Characters that are in even positions
@@ -33,11 +33,11 @@ import java.util.Map;
 
 public class Firewall extends Weapon implements SpellProperty, FireProperty {
     public ActionDescriber getDescriber() {
-        return SpellsList.CHAINLIGHTNING;
+        return SpellsList.FIREWALL;
     }
 
     @Override
-    public ArrayList<Transaction> attack(Map<Position, AbstractCharacter> battlefield, AbstractCharacter attacker) {
+    public ArrayList<Transaction> attack(Map<Position, Character> battlefield, Character attacker) {
         ArrayList<Transaction> transactions = new ArrayList<>();
 
         if (getBlocked()) {
@@ -48,7 +48,7 @@ public class Firewall extends Weapon implements SpellProperty, FireProperty {
 
         for (Position position : battlefield.keySet()) {
             if (position.getPosition() % 2 == 0) {
-                AbstractCharacter target = battlefield.get(position);
+                Character target = battlefield.get(position);
                 transactions.add(new ChangeHPTransaction(attacker, target, this.getClass(), -attacker.getPower()));
                 String message = String.format("Magician \"%s\" is attacking \"%s\" on %d hp.",
                         attacker.getName(), target.getName(), attacker.getPower());

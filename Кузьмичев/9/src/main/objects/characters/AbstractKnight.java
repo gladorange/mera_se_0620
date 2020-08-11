@@ -6,11 +6,9 @@
 
 package main.objects.characters;
 
-import annotations.SaveIgnore;
-
 import main.actions.weapons.Weapon;
 
-import main.objects.characters.stuff.Shield;
+import main.objects.characters.stuff.ShieldStuff;
 import main.objects.characters.stuff.Stuff;
 
 import main.transactions.InfoTransaction;
@@ -22,11 +20,15 @@ import main.transactions.Transaction;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public abstract class AbstractKnight extends AbstractCharacter {
-    @SaveIgnore
+public abstract class AbstractKnight extends Character {
     protected static Integer MIN_POWER = 15;
-    @SaveIgnore
     protected static Integer MAX_POWER = 35;
+
+    /**
+     * Empty constructor for game save implementation
+     */
+    public AbstractKnight() {
+    }
 
     protected AbstractKnight(String name, Integer maxHitPoint, ArrayList<Weapon> weapons) {
         this(name, maxHitPoint, ThreadLocalRandom.current().nextInt(MIN_POWER, MAX_POWER), weapons, null);
@@ -45,7 +47,7 @@ public abstract class AbstractKnight extends AbstractCharacter {
         ArrayList<Transaction> reaction = new ArrayList<>();
 
         if (transaction instanceof ChangeHPTransaction) {
-            AbstractCharacter attacker = transaction.getActionCreator();
+            Character attacker = transaction.getActionCreator();
             Integer hitPoints = ((ChangeHPTransaction) transaction).getHitPoints();
 
             if (attacker == null) {
@@ -55,8 +57,8 @@ public abstract class AbstractKnight extends AbstractCharacter {
 
             reaction.add(new ReactionTransaction("SUCCESS", transaction, true));
 
-            if (getStuff() instanceof Shield) {
-                Integer correctedHitPoints = ((Shield) getStuff()).protect(hitPoints);
+            if (getStuff() instanceof ShieldStuff) {
+                Integer correctedHitPoints = ((ShieldStuff) getStuff()).protect(hitPoints);
                 setHitPoints(getHitPoints() + correctedHitPoints);
 
                 reaction.add(new InfoTransaction(String.format("Knight \"%s\" protects self by shield.", getName())));

@@ -9,5 +9,5 @@ package main.objects.position.effects;
 import main.transactions.WeaponTransaction;
 
 public abstract class Effect {
-    public abstract WeaponTransaction getEffectedTransactions(WeaponTransaction transaction);
+    public abstract WeaponTransaction modifyTransactions(WeaponTransaction transaction);
 }

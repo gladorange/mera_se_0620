@@ -13,7 +13,7 @@ import main.transactions.WeaponTransaction;
 
 public class RainEffect extends Effect{
     @Override
-    public WeaponTransaction getEffectedTransactions(WeaponTransaction transaction) {
+    public WeaponTransaction modifyTransactions(WeaponTransaction transaction) {
         WeaponTransaction changedTransaction = transaction;
         if (transaction.getWeaponClass() == FireProperty.class) {
             if (transaction.getWeaponClass() == ChangeHPTransaction.class) {

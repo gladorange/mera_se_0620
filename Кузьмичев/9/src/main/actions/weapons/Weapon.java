@@ -10,7 +10,7 @@ import main.actions.Action;
 import main.actions.ActionDescriber;
 
 import main.objects.Position;
-import main.objects.characters.AbstractCharacter;
+import main.objects.characters.Character;
 
 import main.transactions.Transaction;
 
@@ -30,5 +30,5 @@ public abstract class Weapon extends Action {
 
     public abstract ActionDescriber getDescriber();
 
-    public abstract ArrayList<Transaction> attack(Map<Position, AbstractCharacter>  battlefield, AbstractCharacter attacker);
+    public abstract ArrayList<Transaction> attack(Map<Position, Character>  battlefield, Character attacker);
 }

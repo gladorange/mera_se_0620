@@ -6,12 +6,8 @@
 
 package main.objects.characters.stuff;
 
-import annotations.SaveName;
-
 public abstract class Protection extends Stuff {
-    @SaveName("Name")
     private String name;
-    @SaveName("Armor")
     private Integer armor;
 
     public Protection(String name, Integer armor) {

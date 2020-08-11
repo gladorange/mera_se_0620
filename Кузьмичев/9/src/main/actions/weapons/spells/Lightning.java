@@ -1,6 +1,6 @@
 /*****************************************************************************
  * File: Lightning.java
- * Purpose: For creation scene transactions depending on weapon implementation
+ * Purpose: For creation scene transactions depending on weapon specification
  * Notice: (c) 2020 Nikolay Kuzmichev. All rights reserved.
  *****************************************************************************/
 
@@ -12,7 +12,7 @@ import main.actions.weapons.Weapon;
 import main.actions.weapons.properties.SpellProperty;
 
 import main.objects.Position;
-import main.objects.characters.AbstractCharacter;
+import main.objects.characters.Character;
 
 import main.transactions.ChangeHPTransaction;
 import main.transactions.InfoTransaction;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Weapon implementation
+ * Weapon specification
  *
  * Name: Lightning
  * Target: Any character
@@ -32,11 +32,11 @@ import java.util.Map;
 
 public class Lightning extends Weapon implements SpellProperty {
     public ActionDescriber getDescriber() {
-        return SpellsList.CHAINLIGHTNING;
+        return SpellsList.LIGHTNING;
     }
 
     @Override
-    public ArrayList<Transaction> attack(Map<Position, AbstractCharacter> battlefield, AbstractCharacter attacker) {
+    public ArrayList<Transaction> attack(Map<Position, Character> battlefield, Character attacker) {
         ArrayList<Transaction> transactions = new ArrayList<>();
 
         if (getBlocked()) {
@@ -45,7 +45,7 @@ public class Lightning extends Weapon implements SpellProperty {
             return transactions;
         }
 
-        AbstractCharacter target = new ArrayList<>(battlefield.values()).get(0);
+        Character target = new ArrayList<>(battlefield.values()).get(0);
 
         for (Position position : battlefield.keySet()) {
             if (battlefield.get(position).getHitPoints() > target.getHitPoints() && target != attacker) {
