@@ -7,12 +7,10 @@ import java.util.function.Consumer;
 
 import static com.mera.lesson10.Cell.Type.PASSAGE;
 import static com.mera.lesson10.Cell.Type.WALL;
-import static java.lang.Integer.parseInt;
 
 /**
  * This class encapsulates the internal representation of the maze and provides
  * methods for creating, managing and extracting information about it.
- *
  * @author Philipp Malkovsky
  */
 public class Maze {
@@ -31,12 +29,6 @@ public class Maze {
      * Two-dimensional array of cells representing maze.
      */
     private final Cell[][] grid;
-
-    /**
-     * Indicates if a method for solving the maze has already
-     * been called. It is used to prevent recalculation.
-     */
-    private boolean isSolved = false;
 
     /**
      * Generates a new maze of given height and width.
@@ -347,66 +339,6 @@ public class Maze {
         return toString(false);
     }
 
-    /**
-     * Parses a serialized maze representation and
-     * constructs a new maze from it.
-     * <p>
-     * Maze is serialized in the following form:
-     * <pre>
-     * height width
-     * cell[0][0] cell[0][1] ... cell[0][width - 1]
-     * cell[1][0] cell[1][1] ... cell[1][width - 1]
-     * ...
-     * cell[height - 1][0] cell[height - 1][1] ... cell[height - 1][width - 1],
-     * </pre>
-     * where cell[i][j] is 1 if the cell type is a wall and 0 if
-     * the cell type is a passage. The escape path is not serialized.
-     * <br>
-     * For example:
-     * <pre>
-     * 5 7
-     * 1 0 1 1 1 1 1
-     * 1 0 0 0 1 0 1
-     * 1 1 1 0 1 0 1
-     * 1 0 0 0 0 0 1
-     * 1 1 1 1 1 0 1
-     * </pre>
-     * (a serialized form)<br>
-     * corresponds to
-     * <pre>
-     * ██  ██████████
-     * ██      ██  ██
-     * ██████  ██  ██
-     * ██          ██
-     * ██████████  ██
-     * </pre>
-     * (a regular form)<br>
-     *
-     * @param str a serialized maze representation
-     * @return a new maze from a given string
-     */
-    public static Maze load(String str) {
-        try {
-            var whole = str.split("\n");
-            var size = whole[0].split(" ");
-            var height = parseInt(size[0]);
-            var width = parseInt(size[1]);
-            var grid = new Cell[height][width];
-            for (int i = 0; i < height; i++) {
-                var row = whole[i + 1].split(" ");
-                for (int j = 0; j < width; j++)
-                    grid[i][j] = new Cell(
-                        i, j, intToType(parseInt(row[j]))
-                    );
-            }
-            return new Maze(height, width, grid);
-        } catch (Exception e) {
-            throw new IllegalArgumentException(
-                "Cannot load the maze. " +
-                    "It has an invalid format"
-            );
-        }
-    }
 
     /**
      * Creates a maze instance with given height, width and grid.
@@ -432,54 +364,6 @@ public class Maze {
         return val == 1 ? WALL : PASSAGE;
     }
 
-    /**
-     * Converts the maze to the serialized form.
-     * <p>
-     * Maze is serialized in the following form:
-     * <pre>
-     * height width
-     * cell[0][0] cell[0][1] ... cell[0][width - 1]
-     * cell[1][0] cell[1][1] ... cell[1][width - 1]
-     * ...
-     * cell[height - 1][0] cell[height - 1][1] ... cell[height - 1][width - 1],
-     * </pre>
-     * where cell[i][j] is 1 if the cell type is a wall and 0 if
-     * the cell type is a passage. The escape path is not serialized.
-     * <br>
-     * For example:
-     * <pre>
-     * 5 7
-     * 1 0 1 1 1 1 1
-     * 1 0 0 0 1 0 1
-     * 1 1 1 0 1 0 1
-     * 1 0 0 0 0 0 1
-     * 1 1 1 1 1 0 1
-     * </pre>
-     * (a serialized form)<br>
-     * corresponds to
-     * <pre>
-     * ██  ██████████
-     * ██      ██  ██
-     * ██████  ██  ██
-     * ██          ██
-     * ██████████  ██
-     * </pre>
-     * (a regular form)<br>
-     *
-     * @return string in a serialized form
-     */
-    public String export() {
-        var sb = new StringBuilder();
-        sb.append(height).append(' ')
-          .append(width).append('\n');
-        for (var row : grid) {
-            for (var cell : row)
-                sb.append(typeToInt(cell))
-                  .append(' ');
-            sb.append('\n');
-        }
-        return sb.toString();
-    }
 
     /**
      * Converts WALL to the 1 and PASSAGE to the 0.
