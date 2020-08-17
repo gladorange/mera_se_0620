@@ -4,7 +4,9 @@ import game.Magician;
 import game.Scene;
 import game.Character;
 
-abstract public class Spell {
+import java.io.Serializable;
+
+abstract public class Spell implements Serializable {
     protected String name;
     protected int damage;
 
@@ -20,4 +22,8 @@ abstract public class Spell {
     public abstract void cast(Scene scene, Magician originator);
 
     public abstract String description();
+
+    public String getName(){
+        return name;
+    }
 }

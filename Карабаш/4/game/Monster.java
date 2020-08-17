@@ -39,4 +39,11 @@ public class Monster extends Character {
     public String getTypeName() {
         return "Монстр";
     }
+
+    @Override
+    public Monster clone(){
+        Monster newMonster = new Monster(this.name, this.position);
+        newMonster.damage = this.damage;
+        return newMonster;
+    }
 }

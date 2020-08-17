@@ -1,8 +1,8 @@
 package game;
 
-import javax.swing.text.AttributeSet;
+import java.io.Serializable;
 
-public class Character {
+public class Character implements Serializable, Cloneable {
     protected int health;
     protected String name;
     final static int DEFAULT_HEALTH = 20;
@@ -34,17 +34,7 @@ public class Character {
     }
 
     public void doAttackSomeone(Scene scene) {
-        doAttackSomeone(scene, DEFAULT_DAMAGE);
-    }
-
-    protected void doAttackSomeone(Scene scene, int damage) {
-        Character someOne = scene.findOpponentExceptMe(position);
-        if (someOne == null) {
-            System.out.println("Кто-то " + name + " не нашел оппонента для аттаки.");
-            return;
-        }
-        System.out.println("Кто-то " + name + " атакует " + someOne.name + " на " + damage + " единиц урона урона");
-        someOne.takeDamage(damage);
+        System.out.println("Полу-абстрактный метод - нет атаки.");
     }
 
     public String getName() {
@@ -63,4 +53,8 @@ public class Character {
         return position;
     }
 
+    @Override
+    public Character clone(){
+        return new Character(this.name, this.position);
+    }
 }

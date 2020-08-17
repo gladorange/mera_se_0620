@@ -5,14 +5,17 @@ import java.util.List;
 import java.util.Random;
 
 public class Scene {
-    final static int SCENE_LENGTH = 10;
-    public Character[] scene;
+    public final static int SCENE_LENGTH = 10;
+    public Character[] scene = new Character[SCENE_LENGTH];
 
-    private final Random random = new Random();
-    static int lastCharacterId = 0;
+    protected final Random random = new Random();
+    protected static int lastCharacterId = 0;
 
     public Scene() {
-        scene = new Character[SCENE_LENGTH];
+        fillScene();
+    }
+
+    protected void fillScene() {
         int numberOfCharacters = 1 + random.nextInt(SCENE_LENGTH);
         for (int i = 0; i < numberOfCharacters; i++) {
             int position = random.nextInt(SCENE_LENGTH);
@@ -67,19 +70,8 @@ public class Scene {
     }
 
     public Character findOpponentExceptMe(int me) {
-        int numAllExceptMe = numberOfAliveCharacters() - 1;
-        int someOne = random.nextInt(numAllExceptMe);
-        int foundIdx = -1;
-        for (int i = 0; i < SCENE_LENGTH; i++) {
-            if (scene[i] != null && scene[i].isAlive() && (i != me)) {
-                if (someOne == 0) {
-                    foundIdx = i;
-                    break;
-                }
-                someOne--;
-            }
-        }
-        return (foundIdx == -1) ? null : scene[foundIdx];
+        Character[] allExceptMe = findAllExceptMe(me);
+        return (allExceptMe.length == 0) ? null : allExceptMe[random.nextInt(allExceptMe.length)];
     }
 
     public Character findMyNeighbour(int me) {
@@ -150,18 +142,16 @@ public class Scene {
         }
         for (int i = 0; i < SCENE_LENGTH; i++) {
             if (scene[i] != null && scene[i].isAlive()) {
-                if (scene[i] instanceof Monster) {
-                    Monster currentMonster = (Monster) scene[i];
-                    currentMonster.doAttackSomeone(this);
-                    System.out.println(".");
-                } else if (scene[i] instanceof Magician) {
-                    Magician currentMagician = (Magician) scene[i];
-                    currentMagician.doAttackSomeone(this);
-                    System.out.println(".");
-                }
+                scene[i].doAttackSomeone(this);
+                System.out.println(".");
             }
         }
-
     }
 
+    public Integer chooseSpellNumber(Integer allSpellsNumber) {
+        if(allSpellsNumber == null || allSpellsNumber == 0){
+            return null;
+        }
+        return random.nextInt(allSpellsNumber);
+    }
 }
